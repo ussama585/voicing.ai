@@ -8,10 +8,11 @@ import { pdf } from 'assets/img/images'
 import { frame } from 'assets/img/images'
 import { playWhiteIcon } from 'assets/img/images'
 import { closeButton } from 'assets/img/images'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const VideoAi = () => {
   const [open, setOpen] = useState(true)
+  const navigate = useNavigate();
 
   return (
     <Dialog open={open} onClose={() => setOpen(false)} className="relative z-10">
@@ -68,8 +69,8 @@ const VideoAi = () => {
                     </div>
                   </div>
                   <div className="mt-3 frame-btn flex justify-center">
-                    <button className='text-white flex items-center me-3'><img src={playWhiteIcon} alt="" className='me-2' />Landscape</button>
-                    <button className='text-white flex items-center'><img src={playWhiteIcon} alt="" className='me-2' />Portrait</button>
+                    <button className='text-white flex items-center me-3' onClick={()=>navigate('/editor-ai')}><img src={playWhiteIcon} alt="" className='me-2' />Landscape</button>
+                    <button className='text-white flex items-center' onClick={()=>navigate('/editor-ai')}><img src={playWhiteIcon} alt="" className='me-2' />Portrait</button>
                   </div>
                 </div>
               </div>
