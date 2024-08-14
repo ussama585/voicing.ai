@@ -1,8 +1,214 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap");
+
 body {
 	font-family: "DM Sans", sans-serif;
+	overflow-x: hidden;
 }
 
 option {
 	color: black;
+}
+
+.logo {
+	width: 140px;
+}
+
+.video-ai-menu img {
+	width: 15px;
+	height: 15px;
+}
+
+.video-ai-menu li {
+	width: fit-content;
+	padding: 10px 20px;
+	border-radius: 30px;
+}
+
+.video-ai-menu li:not(:last-child) {
+	margin-bottom: 5px;
+}
+
+.video-ai-menu li:hover {
+	background-color: #EEF2FF;
+}
+
+.video-ai-menu li:hover p {
+	background: linear-gradient(to right, #2FA5F6, #4318FF);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	/* For other browsers */
+}
+
+.colored-text {
+	background: linear-gradient(to right, #2FA5F6, #4318FF);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	/* For other browsers */
+}
+
+.frame {
+	display: flex;
+	justify-content: center;
+	margin-top: 40px;
+}
+
+.layout {
+	position: relative;
+	border: 1px solid #000;
+	padding: 14%;
+	width: 500px;
+	border-radius: 10px;
+}
+
+.layout img {
+	position: absolute;
+	left: 220px;
+	top: 92px;
+	width: 70px;
+	height: 40px;
+}
+
+.frame-btn button {
+	background: linear-gradient(to right, #2FA5F6, #4318FF);
+	padding: 8px 16px;
+	border-radius: 8px;
+}
+
+.editor-layout nav {
+	height: 50px;
+	padding: 15px 40px;
+	border-bottom: 1px solid #000;
+}
+
+.editor-layout .colored-btn {
+	padding: 5px 16px;
+	font-size: 14px;
+}
+
+.editor-layout .simple-btn {
+	padding: 5px 16px;
+	font-size: 14px;
+}
+
+.colored-btn {
+	background: linear-gradient(to right, #2FA5F6, #4318FF);
+	padding: 8px 16px;
+	border-radius: 8px;
+}
+
+.simple-btn {
+	border: 1px solid #000;
+	color: #000;
+	padding: 8px 16px;
+	border-radius: 8px;
+}
+
+.nav-btn img {
+	width: 14px;
+}
+
+.nav-btn button:not(:last-child) {
+	margin-right: 10px;
+}
+
+.menu-tab {
+	padding: 5px 5px;
+	box-shadow: 1px 0px 3px #00000047;
+	height: 100%;
+}
+
+.menu-tab .menu-tab-wrapper:not(:last-child) {
+	margin-bottom: 10px;
+}
+
+.menu-tab .menu-tab-wrapper:hover {
+	background: linear-gradient(to right, #2FA5F6, #4318FF);
+}
+
+.menu-tab-wrapper:hover {
+	cursor: pointer;
+}
+
+.background-active {
+	background: linear-gradient(to right, #2FA5F6, #4318FF);
+}
+
+.menu-tab .menu-tab-wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding: 13px 4px;
+	border-radius: 8px;
+}
+
+.menu-tab .menu-tab-wrapper p {
+	font-size: 13px;
+	margin-bottom: 0;
+}
+
+.menu-tab .menu-tab-wrapper img {
+	width: 18px;
+	height: 18px;
+}
+
+.menu-tab-options {
+	padding: 15px 5px 5px 5px;
+	box-shadow: 3px 0px 3px #0000001c;
+	height: 100%;
+}
+
+.menu-tab-options p {
+	font-size: 14px;
+	margin-bottom: 0;
+}
+
+.menu-tab-options .template {
+	display: flex;
+	flex-wrap: wrap;
+	margin-top: 20px;
+}
+
+.react-thumbnail-generator {
+	width: 100px;
+	height: 50px;
+}
+
+.timeline {
+	display: flex;
+	flex-direction: column;
+	background: linear-gradient(to right, #4318FF, #2FA5F6);
+	padding: 0px 3px 3px 3px;
+	border-radius: 10px;
+	margin-top: 10px;
+}
+
+.thumbnail-frame {
+	position: relative;
+	background-color: #ccc;
+	padding: 2px 8px;
+}
+
+.thumbnail-frame::before {
+	background-image: url(../img/images/left-arrow.svg);
+	left: -8px;
+}
+
+.thumbnail-frame::after {
+	background-image: url(../img/images/right-arrow.svg);
+	right: -12px;
+}
+
+.thumbnail-frame::before,
+.thumbnail-frame::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	width: 10px;
+	height: 10px;
+	background-size: contain;
+	background-repeat: no-repeat;
+	transform: translateY(-50%);
 }

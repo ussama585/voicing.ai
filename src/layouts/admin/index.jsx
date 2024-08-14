@@ -21,7 +21,7 @@ export default function Admin(props) {
   }, [location.pathname]);
 
   const getActiveRoute = (routes) => {
-    let activeRoute = "Main Dashboard";
+    let activeRoute = "Home";
     for (let i = 0; i < routes.length; i++) {
       if (
         window.location.href.indexOf(
@@ -44,17 +44,42 @@ export default function Admin(props) {
     }
     return activeNavbar;
   };
+  // const getRoutes = (routes) => {
+  //   return routes.map((prop, key) => {
+  //     if (prop.layout === "/admin") {
+  //       return (
+  //         <Route path={`/${prop.path}`} element={prop.component} key={key} />
+  //       );
+  //     } else {
+  //       return null;
+  //     }
+  //   });
+  // };
   const getRoutes = (routes) => {
     return routes.map((prop, key) => {
       if (prop.layout === "/admin") {
         return (
           <Route path={`/${prop.path}`} element={prop.component} key={key} />
         );
+      } else if (prop.subRoutes) {
+        // Handle sub-routes for Video AI
+        return prop.subRoutes.map((subRoute, subKey) => (
+          <Route
+            path={`${prop.layout}/${subRoute.path}`}
+            element={subRoute.component}
+            key={`${key}-${subKey}`}
+          />
+        ));
+      } else if (prop.layout) {
+        return (
+          <Route path={`${prop.layout}/${prop.path}`} element={prop.component} key={key} />
+        );
       } else {
         return null;
       }
     });
   };
+  
 
   document.documentElement.dir = "ltr";
   return (

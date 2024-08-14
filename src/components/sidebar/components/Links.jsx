@@ -23,36 +23,48 @@ export function SidebarLinks(props) {
         route.layout === "/rtl"
       ) {
         return (
-          <Link key={index} to={route.layout + "/" + route.path}>
-            <div className="relative mb-3 flex hover:cursor-pointer">
+          route.secondary ? (
+            <div key={index} className="relative mb-3 flex flex-col hover:cursor-pointer">
               <li
-                className="my-[3px] flex cursor-pointer items-center px-8"
-                key={index}
+                className={`my-[3px] flex cursor-pointer items-center px-8 ${activeRoute(route.path) ? "font-bold text-navy-700 dark:text-white" : "font-medium text-gray-600"
+                  }`}
               >
-                <span
-                  className={`${
-                    activeRoute(route.path) === true
-                      ? "font-bold text-brand-500 dark:text-white"
-                      : "font-medium text-gray-600"
-                  }`}
-                >
-                  {route.icon ? route.icon : <DashIcon />}{" "}
-                </span>
-                <p
-                  className={`leading-1 ml-4 flex ${
-                    activeRoute(route.path) === true
-                      ? "font-bold text-navy-700 dark:text-white"
-                      : "font-medium text-gray-600"
-                  }`}
-                >
-                  {route.name}
-                </p>
+                <span>{route.icon || <DashIcon />} </span>
+                <p className="leading-1 ml-4">{route.name}</p>
               </li>
-              {activeRoute(route.path) ? (
-                <div class="absolute right-0 top-px h-9 w-1 rounded-lg bg-brand-500 dark:bg-brand-400" />
-              ) : null}
+
+              <ul className="ml-4">
+                {route.subRoutes.map((subRoute, subIndex) => (
+                  <Link key={subIndex} to={subRoute.layout + "/" + subRoute.path}>
+                    <li
+                      className={`my-[3px] flex cursor-pointer items-center px-8 ${activeRoute(subRoute.path) ? "font-bold text-navy-700 dark:text-white" : "font-medium text-gray-600"
+                        }`}
+                    >
+                      {/* <span>{subRoute.icon || <DashIcon />} </span> */}
+                      <p className="leading-1 ml-4">{subRoute.name}</p>
+                    </li>
+                  </Link>
+                ))}
+              </ul>
             </div>
-          </Link>
+          ) : (
+            <Link key={index} to={route.layout + "/" + route.path}>
+              <div className="relative mb-3 flex hover:cursor-pointer">
+                <li
+                  className={`my-[3px] flex cursor-pointer items-center px-8 ${activeRoute(route.path) ? "font-bold text-navy-700 dark:text-white" : "font-medium text-gray-600"
+                    }`}
+                >
+                  <span>{route.icon || <DashIcon />} </span>
+                  <p className="leading-1 ml-4">{route.name}</p>
+                </li>
+
+                {activeRoute(route.path) && (
+                  <div className="absolute right-0 top-px h-9 w-1 rounded-lg bg-brand-500 dark:bg-brand-400" />
+                )}
+              </div>
+            </Link>
+          )
+
         );
       }
     });
