@@ -28,7 +28,6 @@ const EditorLayout = () => {
 
   const canvasRef = useRef(null);
   const thumbnailRef = useRef(null);
-  const [thumbnailWidth, setThumbnailWidth] = useState(140)
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [editorText, setEditorText] = useState('');
 
@@ -107,12 +106,6 @@ const EditorLayout = () => {
       };
     }
   }, [currentImage]);
-
-  useEffect(() => {
-    if (thumbnailRef.current) {
-      setThumbnailWidth(thumbnailRef.current.offsetWidth);
-    }
-  }, [sizes]);
 
   return (
     <div className='editor-layout w-full'>
