@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Rnd } from 'react-rnd'; // Import Rnd from react-rnd
-import { aussie, basketball, baseball, american, football, tennis, submit, avatar, assets, brand, image1, image2, image3, text, script, preview, logo, demo1, demo2, demo3 } from 'assets/img/images';
+import {submit, avatar, assets, brand, text, script, preview, logo, demo1, demo2, demo3 } from 'assets/img/images';
 
 const EditorLayout = () => {
   const [activeTab, setActiveTab] = useState("editor");
