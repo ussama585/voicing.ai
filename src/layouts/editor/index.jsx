@@ -282,7 +282,7 @@ const EditorLayout = () => {
                         color: '#000',
                         marginRight: '5px',
                         marginTop: "5px",
-                        width:`${thumbnailWidth}px`
+                        width:`130px`
                       }}>{val.script}</p>
                     )}
                   </div>
