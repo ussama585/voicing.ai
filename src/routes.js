@@ -18,6 +18,7 @@ import {
 } from "react-icons/md";
 import VideoAi from "views/admin/studio/video/VideoAi";
 import VoiceAi from "views/admin/studio/audio/VoiceAi";
+import EditorLayout from "layouts/editor";
 
 const routes = [
   {
@@ -63,6 +64,13 @@ const routes = [
         component: <VoiceAi />,
       },
     ],
+  },
+  {
+    name: "Editor",
+    layout: "/editor-ai",
+    path: "editor",
+    icon: <MdPerson className="h-6 w-6" />,
+    component: <EditorLayout />,
   },
   {
     name: "My Agents",
