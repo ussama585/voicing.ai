@@ -5,26 +5,26 @@ const EditorLayout = () => {
   const [activeTab, setActiveTab] = useState("editor");
   const [imagesArray, setImagesArray] = useState([]);
   const [currentImage, setCurrentImage] = useState({ image: null, title: '' });
-  const [dataArray, setDataArray] = useState([
-    {
-      image: demo1,
-      title: "Chris in black suit",
-      script: '',
-      length: ''
-    },
-    {
-      image: demo2,
-      title: "Chris in beige suit",
-      script: '',
-      length: ''
-    },
-    {
-      image: demo3,
-      title: "Voicing Ai",
-      script: '',
-      length: ''
-    },
-  ]);
+  
+
+  const dataArray = [{
+    image: demo1,
+    title: "Chris in black suit",
+    script: '',
+    length: ''
+  },
+  {
+    image: demo2,
+    title: "Chris in beige suit",
+    script: '',
+    length: ''
+  },
+  {
+    image: demo3,
+    title: "Voicing Ai",
+    script: '',
+    length: ''
+  },]
 
   const canvasRef = useRef(null);
   const thumbnailRef = useRef(null);
