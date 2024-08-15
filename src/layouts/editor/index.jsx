@@ -1,13 +1,35 @@
 import React, { useState, useRef, useEffect } from 'react';
-import {submit, avatar, assets, brand, text, script, preview, logo, demo1, demo2, demo3 } from 'assets/img/images';
+import { submit, preview, logo, demo1, demo2, demo3 } from 'assets/img/images';
+import MenusSidebar from './menus/menus-sidebar';
+import Avatar from './features tab/avatar';
+import Script from './features tab/script';
 
 const EditorLayout = () => {
-  const [activeTab, setActiveTab] = useState("editor");
+  const [activeTab, setActiveTab] = useState("Avatar");
   const [imagesArray, setImagesArray] = useState([]);
   const [currentImage, setCurrentImage] = useState({ image: null, title: '' });
-  
 
-  const dataArray = [{
+
+  const dataArray = [
+    {
+      image: demo1,
+      title: "Chris in black suit",
+      script: '',
+      length: ''
+    },
+    {
+      image: demo2,
+      title: "Chris in beige suit",
+      script: '',
+      length: ''
+    },
+    {
+      image: demo3,
+      title: "Voicing Ai",
+      script: '',
+      length: ''
+    },
+    {
     image: demo1,
     title: "Chris in black suit",
     script: '',
@@ -24,7 +46,8 @@ const EditorLayout = () => {
     title: "Voicing Ai",
     script: '',
     length: ''
-  },]
+  },
+]
 
   const canvasRef = useRef(null);
   const thumbnailRef = useRef(null);
@@ -35,7 +58,7 @@ const EditorLayout = () => {
     imagesArray.map(() => ({ width: 130 }))
   );
 
-  
+
 
   const handleResize = (e, index) => {
     const startX = e.clientX;
@@ -126,61 +149,15 @@ const EditorLayout = () => {
         <div className="col-4">
           <div className="row h-full">
             <div className="col-3">
-              <div className="menu-tab">
-                <div className={`menu-tab-wrapper ${activeTab === 'editor' && "background-active"}`} onClick={() => setActiveTab("editor")}>
-                  <img src={avatar} alt="Avatar" />
-                  <p>Editor</p>
-                </div>
-                <div className={`menu-tab-wrapper ${activeTab === 'script' && "background-active"}`} onClick={() => setActiveTab("script")}>
-                  <img src={script} alt="Script" />
-                  <p>Script</p>
-                </div>
-                <div className={`menu-tab-wrapper ${activeTab === 'assets' && "background-active"}`} onClick={() => setActiveTab("assets")}>
-                  <img src={assets} alt="Assets" />
-                  <p>Assets</p>
-                </div>
-                <div className={`menu-tab-wrapper ${activeTab === 'text' && "background-active"}`}>
-                  <img src={text} alt="Text" />
-                  <p>Text</p>
-                </div>
-                <div className={`menu-tab-wrapper ${activeTab === 'brand' && "background-active"}`}>
-                  <img src={brand} alt="Brand Kit" />
-                  <p>Brand Kit</p>
-                </div>
-              </div>
+              <MenusSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
             </div>
             <div className="col-9 ps-0">
               <div className="menu-tab-options">
-                <h6 className='colored-text font-semibold mb-2'>Choose an Avatar</h6>
-                <div className="flex justify-between items-center">
-                  <p>My Saved Avatars</p>
-                  <button className='text-white colored-btn'>Create Avatar</button>
-                </div>
-                {activeTab === "editor" ? (
-                  <div className="template">
-                    {dataArray.map((row, index) => (
-                      <div
-                        key={index}
-                        className="text-center cursor-pointer transition-transform transform hover:scale-105 mb-2 me-2"
-                        onClick={() => handleLoadImage(row)}
-                      >
-                        <img src={row.image} alt={row.title} className="w-full h-auto object-cover" />
-                        <p className="mt-2 text-sm font-medium text-gray-700">{row.title}</p>
-                      </div>
-                    ))}
-                  </div>
+
+                {activeTab === "Avatar" ? (
+                  <Avatar dataArray={dataArray} handleLoadImage={handleLoadImage} />
                 ) : activeTab === "script" ? (
-                  <div className="text-left">
-                    <h3 className="text-base font-semibold leading-6 text-gray-900" id="modal-title">Write your script here</h3>
-                    <div className="mt-2">
-                      <textarea
-                        value={editorText}
-                        onChange={handleEditorChange}
-                        placeholder="Write something..."
-                        className="w-full p-2 border border-gray-300 rounded"
-                      />
-                    </div>
-                  </div>
+                  <Script editorText={editorText} handleEditorChange={handleEditorChange} />
                 ) : (
                   <div className="template">
                     {/* {logos.map((row, index) => (
@@ -275,7 +252,7 @@ const EditorLayout = () => {
                         color: '#000',
                         marginRight: '5px',
                         marginTop: "5px",
-                        width:`130px`
+                        width: `130px`
                       }}>{val.script}</p>
                     )}
                   </div>
