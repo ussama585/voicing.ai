@@ -1,6 +1,9 @@
 import React from 'react'
 
-const Avatar = ({dataArray, handleLoadImage}) => {
+const Avatar = ({ dataArray, handleLoadImage, imageWidth }) => {
+
+  const thumbWidth = (imageWidth / 2 - 20)
+
   return (
     <>
       <h6 className='colored-text font-semibold mb-3'>Choose an Avatar</h6>
@@ -12,10 +15,10 @@ const Avatar = ({dataArray, handleLoadImage}) => {
         {dataArray.map((row, index) => (
           <div
             key={index}
-            className="text-center cursor-pointer transition-transform transform hover:scale-105 mb-3 me-2"
+            className="template-image text-center cursor-pointer transition-transform transform hover:scale-105 mb-3 me-2"
             onClick={() => handleLoadImage(row)}
           >
-            <img src={row.image} alt={row.title} className="w-full h-auto object-cover" />
+            <img src={row.image} alt={row.title} style={{ width: `${thumbWidth}px` }} className="w-full h-auto object-cover" />
             <p className="mt-2 text-sm font-medium text-gray-700">{row.title}</p>
           </div>
         ))}

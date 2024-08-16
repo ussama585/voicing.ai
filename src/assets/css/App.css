@@ -21,8 +21,10 @@ option {
 
 .transparent-btn {
 	border: 1px solid #d6d6d6;
-	padding: 8px 25px;
+	padding: 7px 25px;
 	border-radius: 10px;
+	font-size: 12px;
+	min-width: 100px;
 }
 
 /* global end */
@@ -170,7 +172,7 @@ option {
 }
 
 .menu-tab-options {
-	padding: 15px 5px 5px 5px;
+	padding: 15px 5px 5px 10px;
 	box-shadow: 3px 0px 3px #0000001c;
 	height: 100%;
 }
@@ -189,6 +191,16 @@ option {
 .react-thumbnail-generator {
 	width: 100px;
 	height: 50px;
+}
+
+.bottom-section {
+  overflow-x: scroll; 
+  scrollbar-width: none;
+  -ms-overflow-style: none; 
+}
+
+.bottom-section::-webkit-scrollbar {
+  display: none; 
 }
 
 .timeline {
@@ -229,8 +241,11 @@ option {
 }
 
 /* avatar */
+.template-image {
+	/* max-width: 140px; */
+}
 .template img {
-	max-width: 249px;
+	max-width: 100%;
 	border-radius: 10px;
 }
 
@@ -285,6 +300,7 @@ option {
 .script-textarea {
 	border: none !important;
 	background-color: #f6f6f6;
+	border-radius: 10px;
 }
 
 .script-textarea:focus-visible {
@@ -384,3 +400,58 @@ option {
 
 
 /* script end */
+/* gallery section */
+
+.photo-gallery {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 10px;
+	padding: 10px;
+}
+
+.photo-item {
+	position: relative;
+	max-width: 200px;
+	flex: 1 1 calc(60% - 40px); /* Adjusts items to fit within 25% of the container width */
+	border-radius: 10px;
+	overflow: hidden;
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.photo-item img {
+	width: 100%;
+	height: auto;
+}
+
+.photo-item p {
+	margin: 10px 0;
+	font-size: 13px;
+	color: #333;
+}
+
+.photo-item .badge {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	background-color: #007BFF;
+	color: white;
+	padding: 5px 10px;
+	border-radius: 50%;
+	font-size: 12px;
+}
+
+@media (max-width: 768px) {
+	.photo-item {
+			flex: 1 1 calc(50% - 40px); /* Stack two items per row on smaller screens */
+	}
+}
+
+@media (max-width: 480px) {
+	.photo-item {
+			flex: 1 1 100%; /* Stack items vertically on very small screens */
+	}
+}
+
+/* gallery section end */
