@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { submit, preview, logo, demo1, demo2, demo3 } from 'assets/img/images';
+import { submit, preview, logo } from 'assets/img/images';
 import MenusSidebar from './menus/menus-sidebar';
 import Avatar from './features tab/avatar';
 import Script from './features tab/script';
@@ -15,62 +15,152 @@ import { zoomIn } from 'assets/img/images';
 import { fitScreen } from 'assets/img/images';
 import { Option } from 'assets/img/images';
 import { frameSplitter } from 'assets/img/images';
+import {
+  avatar1,
+  avatar2,
+  avatar3,
+  avatar4,
+  avatar5,
+  avatar6,
+  avatar7,
+  avatar8,
+  avatar9,
+  avatar10,
+  avatar11,
+  avatar12,
+  avatar13,
+  avatar14,
+  avatar15,
+  avatar16,
+  avatar17,
+  avatar18
+} from 'assets/img/images';
+import Assets from './features tab/assets';
 
+const dataArray = [
+  {
+    image: avatar1,
+    title: "Chris in black suit",
+    script: '',
+    length: ''
+  },
+  {
+    image: avatar2,
+    title: "Chris in beige suit",
+    script: '',
+    length: ''
+  },
+  {
+    image: avatar3,
+    title: "Voicing Ai",
+    script: '',
+    length: ''
+  },
+  {
+    image: avatar4,
+    title: "Chris in black suit",
+    script: '',
+    length: ''
+  },
+  {
+    image: avatar5,
+    title: "Chris in beige suit",
+    script: '',
+    length: ''
+  },
+  {
+    image: avatar6,
+    title: "Voicing Ai",
+    script: '',
+    length: ''
+  },
+  {
+    image: avatar7,
+    title: "Voicing Ai",
+    script: '',
+    length: ''
+  },
+  {
+    image: avatar8,
+    title: "Chris in black suit",
+    script: '',
+    length: ''
+  },
+  {
+    image: avatar9,
+    title: "Chris in beige suit",
+    script: '',
+    length: ''
+  },
+  {
+    image: avatar10,
+    title: "Voicing Ai",
+    script: '',
+    length: ''
+  },
+  {
+    image: avatar11,
+    title: "Chris in black suit",
+    script: '',
+    length: ''
+  },
+  {
+    image: avatar12,
+    title: "Chris in beige suit",
+    script: '',
+    length: ''
+  },
+  {
+    image: avatar13,
+    title: "Voicing Ai",
+    script: '',
+    length: ''
+  },
+  {
+    image: avatar14,
+    title: "Voicing Ai",
+    script: '',
+    length: ''
+  },
+  {
+    image: avatar15,
+    title: "Chris in black suit",
+    script: '',
+    length: ''
+  },
+  {
+    image: avatar16,
+    title: "Chris in beige suit",
+    script: '',
+    length: ''
+  },
+  {
+    image: avatar17,
+    title: "Voicing Ai",
+    script: '',
+    length: ''
+  },
+  {
+    image: avatar18,
+    title: "Voicing Ai",
+    script: '',
+    length: ''
+  },
+]
 const EditorLayout = () => {
+
+  const [screenHeight, setScreenHeight] = useState("")
+
   const [activeTab, setActiveTab] = useState("avatar");
-  const [imagesArray, setImagesArray] = useState([]);
+  const [canvasArray, setCanvasArray] = useState([]);
   const [currentImage, setCurrentImage] = useState({ image: null, title: '' });
-
-
-  const dataArray = [
-    {
-      image: demo1,
-      title: "Chris in black suit",
-      script: '',
-      length: ''
-    },
-    {
-      image: demo2,
-      title: "Chris in beige suit",
-      script: '',
-      length: ''
-    },
-    {
-      image: demo3,
-      title: "Voicing Ai",
-      script: '',
-      length: ''
-    },
-    {
-      image: demo1,
-      title: "Chris in black suit",
-      script: '',
-      length: ''
-    },
-    {
-      image: demo2,
-      title: "Chris in beige suit",
-      script: '',
-      length: ''
-    },
-    {
-      image: demo3,
-      title: "Voicing Ai",
-      script: '',
-      length: ''
-    },
-  ]
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [editorArray, setEditorArray] = useState([]);
 
   const canvasRef = useRef(null);
   const thumbnailRef = useRef(null);
-  const [selectedIndex, setSelectedIndex] = useState(null);
-  const [editorText, setEditorText] = useState('');
-
-  const [sizes, setSizes] = useState(
-    imagesArray.map(() => ({ width: 130 }))
-  );
-
   const containerRef = useRef(null);
+  const [sizes, setSizes] = useState(canvasArray.map(() => ({ width: 130 })));
   const [imageWidth, setImageWidth] = useState(0);
 
   const updateImageWidth = () => {
@@ -82,7 +172,6 @@ const EditorLayout = () => {
 
   useEffect(() => {
     updateImageWidth();
-
     window.addEventListener('resize', updateImageWidth);
 
     return () => {
@@ -92,15 +181,13 @@ const EditorLayout = () => {
 
   const handleResize = (e, index) => {
     const startX = e.clientX;
-
-    // Safely access the width, falling back to a default value if undefined
     const startWidth = sizes[index]?.width || 130;
 
     const onMouseMove = (moveEvent) => {
       const newWidth = startWidth + moveEvent.clientX - startX;
       setSizes((prevSizes) => {
         const updatedSizes = [...prevSizes];
-        updatedSizes[index] = { width: Math.max(newWidth, 130) }; // Set a minimum width of 130px
+        updatedSizes[index] = { width: Math.max(newWidth, 130) };
         return updatedSizes;
       });
     };
@@ -115,57 +202,141 @@ const EditorLayout = () => {
   };
 
   const handleChangeTab = (tab) => {
-    setActiveTab(tab)
-  }
-
-  // function to load script on frame
-  const handleImageClick = (index, img) => {
-    setActiveTab('script');
-    setCurrentImage(prev => ({ ...prev, image: img }))
-    setSelectedIndex(index);
-    setEditorText(imagesArray[index].script);
+    setActiveTab(tab);
   };
 
-  const averageWPM = 150;
+  const handleImageClick = (index, img) => {
+    setCurrentImage(prev => ({ ...prev, image: img }));
+    setSelectedIndex(index);
+    if (editorArray.length < canvasArray.length) {
+      setEditorArray(prev => [...prev, '']);
+      setActiveTab('script');
+    }
+  };
 
-  // text to time calculator
+  const handleButtonClick = (index) => {
+    if (editorArray.length < canvasArray.length) {
+      setEditorArray(prev => [...prev, '']);
+    }
+  }
+
+  const handleButtonClickToRemoveTextarea = () => {
+    if (editorArray.length > 0) {
+      // Remove the last element from editorArray
+      setEditorArray((prevArray) => prevArray.slice(0, -1));
+
+      // Clear the script field of the last item in canvasArray
+      setCanvasArray((prev) => {
+        const updatedArray = [...prev];
+        const lastIndex = editorArray.length - 1;
+
+        if (lastIndex >= 0) {
+          updatedArray[lastIndex] = { ...updatedArray[lastIndex], script: '' };
+        }
+
+        return updatedArray;
+      });
+    }
+  };
+
+
+  const handleLoadImage = (row, index) => {
+    setCurrentImage((prev) => ({ ...prev, image: row.image, title: row.title }));
+    setCanvasArray(prev => [...prev, { ...row, script: '', length: '' }]);
+  };
+
+  const handleEditorChange = (e, index) => {
+    const text = e.target.value;
+    const timeLength = calculateTime(text);
+
+    setEditorArray(prev => {
+      const newEditorArray = [...prev];
+      newEditorArray[index] = text;
+      return newEditorArray;
+    });
+
+    setCanvasArray(prev =>
+      prev.map((item, idx) =>
+        idx === index ? { ...item, script: text, length: timeLength } : item
+      )
+    );
+  };
+
   const calculateTime = (text) => {
+    const averageWPM = 150;
     const words = text.trim().split(/\s+/).length;
     const timeInSeconds = (words / averageWPM) * 60;
     return timeInSeconds.toFixed(2);
   };
 
-  const handleEditorChange = (e) => {
-    let text = e.target.value;
-    let getLength = calculateTime(text);
-
-    setEditorText(e.target.value);
-
-    setImagesArray(prev =>
-      prev.map((item, idx) =>
-        idx === selectedIndex ? { ...item, script: e.target.value, length: getLength } : item
-      )
-    );
-  };
-
-  // load image on canvas
-  const handleLoadImage = (row) => {
-    setCurrentImage((prev) => ({ ...prev, image: row.image, title: row.title }));
-    setImagesArray(prev => [...prev, row]);
-  };
-
   useEffect(() => {
-    if (currentImage.image && canvasRef.current) {
+    if (canvasRef.current) {
       const canvas = canvasRef.current;
       const ctx = canvas.getContext('2d');
-      const img = new Image();
-      img.src = currentImage.image;
-      img.onload = () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      };
+
+      // Draw the checkerboard pattern
+      const squareSize = 10;
+      const numCols = Math.ceil(canvas.width / squareSize);
+      const numRows = Math.ceil(canvas.height / squareSize);
+
+      for (let i = 0; i < numCols; i++) {
+        for (let j = 0; j < numRows; j++) {
+          if ((i + j) % 2 === 0) {
+            ctx.fillStyle = '#cccccc'; // Light grey
+          } else {
+            ctx.fillStyle = '#ffffff'; // White
+          }
+          ctx.fillRect(i * squareSize, j * squareSize, squareSize, squareSize);
+        }
+      }
+
+      if (currentImage.image) {
+        const img = new Image();
+        img.src = currentImage.image;
+        img.onload = () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+          for (let i = 0; i < numCols; i++) {
+            for (let j = 0; j < numRows; j++) {
+              if ((i + j) % 2 === 0) {
+                ctx.fillStyle = '#cccccc';
+              } else {
+                ctx.fillStyle = '#ffffff';
+              }
+              ctx.fillRect(i * squareSize, j * squareSize, squareSize, squareSize);
+            }
+          }
+
+          // Calculate the aspect ratio of the image and canvas
+          const imageAspectRatio = img.width / img.height;
+          const canvasAspectRatio = canvas.width / canvas.height;
+
+          let renderableWidth, renderableHeight, xStart, yStart;
+
+          if (imageAspectRatio < canvasAspectRatio) {
+            renderableHeight = canvas.height;
+            renderableWidth = img.width * (renderableHeight / img.height);
+            xStart = (canvas.width - renderableWidth) / 2;
+            yStart = 0;
+          } else {
+            renderableWidth = canvas.width;
+            renderableHeight = img.height * (renderableWidth / img.width);
+            xStart = 0;
+            yStart = (canvas.height - renderableHeight) / 2;
+          }
+
+          // Draw the image with the contain style
+          ctx.drawImage(img, xStart, yStart, renderableWidth, renderableHeight);
+        };
+      }
     }
   }, [currentImage]);
+
+
+  useEffect(() => {
+    let getHeight = window.innerHeight;
+    setScreenHeight(getHeight)
+  }, [])
 
 
   return (
@@ -183,37 +354,35 @@ const EditorLayout = () => {
           </button>
         </div>
       </nav>
-      <div className="row" style={{ height: "calc(100vh - 50px)" }}>
-        <div className="col-5">
+      <div className="row">
+        <div className="col-4">
           <div className="row h-full">
             <div className="col-3">
               <MenusSidebar activeTab={activeTab} setActiveTab={setActiveTab} handleChangeTab={handleChangeTab} />
             </div>
             <div className="col-9 ps-0">
               <div ref={containerRef} id='menu-tab-options' className="menu-tab-options">
-
                 {activeTab === "avatar" ? (
-                  <Avatar dataArray={dataArray} handleLoadImage={handleLoadImage} imageWidth={imageWidth} />
+                  <Avatar dataArray={dataArray} handleLoadImage={handleLoadImage} imageWidth={imageWidth} screenHeight={screenHeight} />
                 ) : activeTab === "script" ? (
-                  <Script editorText={editorText} handleEditorChange={handleEditorChange} />
+                  <Script
+                    editorArray={editorArray}
+                    handleEditorChange={handleEditorChange}
+                    handleButtonClick={handleButtonClick}
+                    handleButtonClickToRemoveTextarea={handleButtonClickToRemoveTextarea}
+                  />
+                ) : activeTab === "assets" ? (
+                  <Assets />
                 ) : (
                   <div className="template">
-                    {/* {logos.map((row, index) => (
-                      <div
-                        key={index}
-                        className="text-center cursor-pointer transition-transform transform hover:scale-105 mb-2 me-2"
-                      >
-                        <img src={row.image} alt={row.title} className="w-full h-auto object-cover" />
-                      </div>
-                    ))} */}
+                    {/* Other template code */}
                   </div>
                 )}
-
               </div>
             </div>
           </div>
         </div>
-        <div className="col-7">
+        <div className="col-8">
           <div className='py-5'>
             {/* canvas */}
             <div className='flex justify-center item-center'>
@@ -252,11 +421,12 @@ const EditorLayout = () => {
             <div>
               <img src={scale} alt="" />
               <div className='bottom-section' style={{ display: 'flex', gap: '10px' }}>
-                {imagesArray.map((val, index) => {
+                {console.log(canvasArray, "imagesArrayimagesArrayimagesArray")}
+                {canvasArray.map((val, index) => {
                   const width = sizes[index]?.width || 120;
 
                   return (
-                    <div>
+                    <div key={index}>
                       <div className='timeline' style={{ width: `max-content`, }}>
                         {val.title && (
                           <p className="" style={{
@@ -325,8 +495,6 @@ const EditorLayout = () => {
                 })}
               </div>
             </div>
-
-
           </div>
         </div>
       </div>

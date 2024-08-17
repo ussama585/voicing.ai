@@ -5,21 +5,32 @@ import { arrowUp } from 'assets/img/images';
 import { playBlackIcon } from 'assets/img/images'
 import React, { useEffect, useRef, useState } from 'react'
 
-const Script = ({ editorText, handleEditorChange }) => {
+const Script = ({ editorArray, handleEditorChange, handleButtonClick, handleButtonClickToRemoveTextarea }) => {
 
   const dropdownRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => {
-    console.log("firstfirstfirstfirstfirst")
     setIsOpen(!isOpen);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      if (e.shiftKey) {
+        // Shift + Enter creates a new line
+        return;
+      } else {
+        // Enter alone creates a new textarea
+        e.preventDefault(); // Prevent default action of adding a newline
+        handleButtonClick(); // Add a new textarea
+      }
+    }
   };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsOpen(false);
-        console.log("Clicked outside");
       }
     };
 
@@ -31,11 +42,11 @@ const Script = ({ editorText, handleEditorChange }) => {
 
   return (
     <div className="text-left pe-3">
-      <h6 className='colored-text font-semibold mb-3'>Choose an Avatar</h6>
-      <hr className='h-seperator' />
+      <h5 className='bold-font colored-text font-semibold mb-3'>Script</h5>
+      <hr className='h-seperator-one' />
       {/* Base */}
 
-      <div className='flex items-center mt-3 px-4 mb-5'>
+      <div className='flex items-center px-4 mb-4'>
         <button className="bottom-border-btn inline-block " >
           Text
         </button>
@@ -45,62 +56,68 @@ const Script = ({ editorText, handleEditorChange }) => {
       </div>
 
       <div>
-        <h5 className='mb-2' style={{ fontSize: "14px", fontWeight: "500" }}>Select Voice</h5>
-        <div class="custom-select" ref={dropdownRef} onClick={toggleDropdown}>
-          <div class="arrow-down">
+        <h5 className='mb-3'>Select Voice</h5>
+        <div className="custom-select" style={{ borderRadius: isOpen && "10px 10px 0 0" }} ref={dropdownRef} onClick={toggleDropdown}>
+          <div className="arrow-down">
             <img src={playBlackIcon} alt="" width={16} height={16} />
           </div>
-          <div class="select-box">
-            <div class="file-info">
-              <span class="file-name">New audio.mp3</span>
-              <span class="file-duration">00:12</span>
+          <div className="select-box">
+            <div className="file-info">
+              <span className="file-name">New audio.mp3</span>
+              <span className="file-duration">00:12</span>
             </div>
-            <div class="arrow-down">
+            <div className="arrow-down">
               <img src={isOpen ? arrowUp : arrowDown} alt="" width={16} height={16} />
             </div>
           </div>
-          {isOpen && <div id="dropdown" class="dropdown-content">
-            <div class="dropdown-item">
-              <span class="file-name">New audio.mp3</span>
-              <span class="file-duration">00:12</span>
+          {isOpen && <div id="dropdown" className="dropdown-content">
+            <div className="dropdown-item">
+              <span className="file-name">New audio.mp3</span>
+              <span className="file-duration">00:12</span>
             </div>
-            <div class="dropdown-item">
-              <span class="file-name">New audio1.mp3</span>
-              <span class="file-duration">00:30</span>
+            <div className="dropdown-item">
+              <span className="file-name">New audio1.mp3</span>
+              <span className="file-duration">00:30</span>
             </div>
-            <div class="dropdown-item">
-              <span class="file-name">New audio2.mp3</span>
-              <span class="file-duration">30:10</span>
+            <div className="dropdown-item">
+              <span className="file-name">New audio2.mp3</span>
+              <span className="file-duration">30:10</span>
             </div>
-            <div class="dropdown-item">
-              <span class="file-name">New audio3.mp3</span>
-              <span class="file-duration">04:20</span>
+            <div className="dropdown-item">
+              <span className="file-name">New audio3.mp3</span>
+              <span className="file-duration">04:20</span>
             </div>
-            <div class="dropdown-item">
-              <span class="file-name">New audio1.mp3</span>
-              <span class="file-duration">00:10</span>
+            <div className="dropdown-item">
+              <span className="file-name">New audio1.mp3</span>
+              <span className="file-duration">00:10</span>
             </div>
           </div>}
         </div>
       </div>
-      <hr className='h-seperator' style={{ margin: "25px 0" }} />
+      <hr className='h-seperator-one' style={{ margin: "25px 0" }} />
 
       <div className="my-2">
-        <textarea
-          value={editorText}
-          onChange={handleEditorChange}
-          rows={4}
-          placeholder="Write something..."
-          className="script-textarea w-full p-2 border border-gray-300"
-          style={{ fontSize: "14px" }}
-        />
+        {editorArray.length > 0 && (
+          editorArray.map((text, index) => (
+            <textarea
+              key={index}
+              value={text}
+              onChange={(e) => handleEditorChange(e, index)}
+              onKeyDown={handleKeyDown}
+              rows={4}
+              placeholder="Write something..."
+              className="script-textarea w-full p-2 border border-gray-300"
+              style={{ fontSize: "14px" }}
+            />
+          ))
+        )}
       </div>
 
       <div className='flex items-center'>
-        <hr className='h-seperator' style={{ width: "100%", height: "2px" }} />
-        <img src={add} alt="" className='cursor-pointer transition-transform transform hover:scale-105' style={{ margin: "10px", }} />
-        <img src={addTime} alt="" className='cursor-pointer transition-transform transform hover:scale-105' style={{ margin: "10px", }} />
-        <hr className='h-seperator' style={{ width: "100%", height: "2px" }} />
+        <hr className='h-seperator-two' style={{ width: "100%", height: "2px" }} />
+        <img src={add} alt="" className='cursor-pointer transition-transform transform hover:scale-105' style={{ margin: "10px", }} onClick={()=>{handleButtonClick()}} />
+        <img src={addTime} alt="" className='cursor-pointer transition-transform transform hover:scale-105' style={{ margin: "10px", }} onClick={()=>handleButtonClickToRemoveTextarea()} />
+        <hr className='h-seperator-two' style={{ width: "100%", height: "2px" }} />
       </div>
 
       <div className='flex flex-col gap-3'>
@@ -113,7 +130,7 @@ const Script = ({ editorText, handleEditorChange }) => {
       </div>
 
     </div>
-  )
+  );
 }
 
-export default Script
+export default Script;

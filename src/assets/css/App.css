@@ -1,8 +1,40 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap");
 
 body {
-	font-family: "DM Sans", sans-serif;
+	font-family: "Plus Jakarta Sans", sans-serif;
+	font-optical-sizing: auto;
 	overflow-x: hidden;
+}
+
+h5 {
+	font-size: 16px;
+	font-weight: 600;
+	font-family: "Plus Jakarta Sans", sans-serif;
+	font-optical-sizing: auto;
+}
+
+h5.bold-font {
+	font-size: 16px;
+	font-weight: 700;
+	font-family: "Plus Jakarta Sans", sans-serif;
+	font-optical-sizing: auto;
+	background: linear-gradient(to bottom, #2FA5F6, #4318FF);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+}
+
+h6 {
+	font-size: 16px;
+	font-weight: 400;
+	font-family: "Plus Jakarta Sans", sans-serif;
+	font-optical-sizing: auto;
+}
+
+button {
+	font-family: "Inter";
+  font-optical-sizing: auto;
+	font-weight: 400;
 }
 
 option {
@@ -14,9 +46,15 @@ option {
 }
 
 /* global */
-.h-seperator {
-	background-color: #DBDBDB;
-	height: 3px !important;
+.h-seperator-one {
+	background-color: #191919;
+	height: 1px !important;
+	border-radius: 30px;
+}
+.h-seperator-two {
+	background-color: #a3a3a3;
+	height: 1px !important;
+	border-radius: 30px;
 }
 
 .transparent-btn {
@@ -184,6 +222,8 @@ option {
 
 .menu-tab-options .template {
 	display: flex;
+	justify-content: space-between;
+	align-items: center;
 	flex-wrap: wrap;
 	margin-top: 20px;
 }
@@ -194,13 +234,13 @@ option {
 }
 
 .bottom-section {
-  overflow-x: scroll; 
-  scrollbar-width: none;
-  -ms-overflow-style: none; 
+	overflow-x: scroll;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
 }
 
 .bottom-section::-webkit-scrollbar {
-  display: none; 
+	display: none;
 }
 
 .timeline {
@@ -244,6 +284,7 @@ option {
 .template-image {
 	/* max-width: 140px; */
 }
+
 .template img {
 	max-width: 100%;
 	border-radius: 10px;
@@ -255,16 +296,17 @@ option {
 .bottom-border-btn {
 	position: relative;
 	width: 100%;
-	border-bottom: 2px solid #DBDBDB;
+	border-bottom: 1px solid #DBDBDB;
 	padding: 20px 15px;
-	font-weight: 600;
+	font-weight: 300;
 	text-decoration: none;
 	color: #585969;
 	z-index: 1;
 	background: linear-gradient(to right, #000, #000);
 	-webkit-background-clip: text;
 	background-clip: text;
-	color: transparent;
+	color: #585969;
+	font-family: "Inter", sans-serif !important;
 }
 
 .bottom-border-btn::before {
@@ -274,10 +316,13 @@ option {
 	left: 0;
 	width: 100%;
 	height: 2px;
+	font-weight: 600;
 	background: linear-gradient(to right, #2FA5F6, #4318FF);
 	transform: scaleX(0);
 	transition: transform 0.3s ease;
 	transform-origin: right;
+  font-optical-sizing: auto;
+	font-family: "Inter", sans-serif !important;
 }
 
 .bottom-border-btn:hover::before {
@@ -289,6 +334,7 @@ option {
 	background: linear-gradient(to right, #2FA5F6, #4318FF);
 	/* Gradient color for text on hover */
 	-webkit-background-clip: text;
+	font-weight: 600;
 	background-clip: text;
 	color: transparent;
 }
@@ -299,7 +345,7 @@ option {
 
 .script-textarea {
 	border: none !important;
-	background-color: #f6f6f6;
+	background-color: #ecececb3;
 	border-radius: 10px;
 }
 
@@ -312,7 +358,7 @@ option {
 	width: 100%;
 	/* Adjust the width to your preference */
 	padding: 10px;
-	border: 1px solid #e0e0e0;
+	/* border: 1px solid #e0e0e0; */
 	border-radius: 8px;
 	display: flex;
 	justify-content: space-between;
@@ -362,11 +408,11 @@ option {
 
 .dropdown-content {
 	position: absolute;
-	top: 100%;
+	top: 89%;
 	left: 0;
 	width: 100%;
 	background-color: #fff;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	box-shadow: 0px 10px 3px #0000001a;
 	border-radius: 8px;
 	z-index: 10;
 	overflow: hidden;
@@ -413,7 +459,8 @@ option {
 .photo-item {
 	position: relative;
 	max-width: 200px;
-	flex: 1 1 calc(60% - 40px); /* Adjusts items to fit within 25% of the container width */
+	flex: 1 1 calc(60% - 40px);
+	/* Adjusts items to fit within 25% of the container width */
 	border-radius: 10px;
 	overflow: hidden;
 	text-align: center;
@@ -444,13 +491,15 @@ option {
 
 @media (max-width: 768px) {
 	.photo-item {
-			flex: 1 1 calc(50% - 40px); /* Stack two items per row on smaller screens */
+		flex: 1 1 calc(50% - 40px);
+		/* Stack two items per row on smaller screens */
 	}
 }
 
 @media (max-width: 480px) {
 	.photo-item {
-			flex: 1 1 100%; /* Stack items vertically on very small screens */
+		flex: 1 1 100%;
+		/* Stack items vertically on very small screens */
 	}
 }
 
