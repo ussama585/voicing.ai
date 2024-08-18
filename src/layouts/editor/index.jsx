@@ -230,7 +230,6 @@ const EditorLayout = () => {
   const [currentImage, setCurrentImage] = useState({ image: null, bgImage: null, title: '' });
   const [selectedIndex, setSelectedIndex] = useState(null); // Track the currently displayed avatar
   const [editorArray, setEditorArray] = useState([]);
-  const [count, setCount] = useState(0)
 
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
@@ -434,7 +433,6 @@ const EditorLayout = () => {
     setCanvasArray(updatedCanvasArray);
     setSelectedIndex(index); // Set the currently displayed avatar
     setCurrentImage(updatedCanvasArray[index]); // Update currentImage with the selected avatar
-    setCount(prev => prev + 1); // Increment count
 
     if (editorArray.length < updatedCanvasArray.length) {
       setEditorArray(prev => [...prev, '']);
@@ -721,7 +719,7 @@ const EditorLayout = () => {
         canvas.removeEventListener('mouseup', handleMouseUp);
       }
     };
-  }, [currentImage, draggedElement, isDragging]);
+  }, [currentImage, draggedElement, handleMouseDown, handleMouseMove, handleMouseUp, isDragging]);
 
 
 
