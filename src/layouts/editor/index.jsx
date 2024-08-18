@@ -240,6 +240,136 @@ const EditorLayout = () => {
   const [sizes, setSizes] = useState(canvasArray.map(() => ({ width: 130 })));
   const [imageWidth, setImageWidth] = useState(0);
 
+  const [isDragging, setIsDragging] = useState(false);
+  const [draggedElement, setDraggedElement] = useState(null);
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+
+  const handleMouseDown = (event) => {
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+
+    // Check for icons
+    for (let i = 0; i < currentImage.icons.length; i++) {
+      const icon = currentImage.icons[i];
+      if (
+        mouseX >= icon.xPos &&
+        mouseX <= icon.xPos + icon.size &&
+        mouseY >= icon.yPos &&
+        mouseY <= icon.yPos + icon.size
+      ) {
+        setIsDragging(true);
+        setDraggedElement({ ...icon, type: 'icon', index: i });
+        setOffset({ x: mouseX - icon.xPos, y: mouseY - icon.yPos });
+        return; // Exit early once an element is found
+      }
+    }
+
+    // Check for stickers
+    if (currentImage?.stickers) {
+      for (let i = 0; i < currentImage.stickers.length; i++) {
+        const sticker = currentImage.stickers[i];
+        if (
+          mouseX >= sticker.xPos &&
+          mouseX <= sticker.xPos + sticker.size &&
+          mouseY >= sticker.yPos &&
+          mouseY <= sticker.yPos + sticker.size
+        ) {
+          setIsDragging(true);
+          setDraggedElement({ ...sticker, type: 'sticker', index: i });
+          setOffset({ x: mouseX - sticker.xPos, y: mouseY - sticker.yPos });
+          return; // Exit early once an element is found
+        }
+      }
+    };
+  }
+
+  const handleMouseMove = (event) => {
+    if (!isDragging || !draggedElement) return;
+
+    const canvas = canvasRef.current;
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = event.clientX - rect.left;
+    const mouseY = event.clientY - rect.top;
+
+    const newXPos = mouseX - offset.x;
+    const newYPos = mouseY - offset.y;
+
+    setDraggedElement((prev) => ({
+      ...prev,
+      xPos: newXPos,
+      yPos: newYPos,
+    }));
+
+    // Draw while moving
+    redrawCanvas(newXPos, newYPos);
+  };
+
+  const handleMouseUp = () => {
+    if (!isDragging || !draggedElement) return;
+
+    const updatedCanvasArray = [...canvasArray];
+    if (draggedElement.type === 'icon') {
+      updatedCanvasArray[selectedIndex].icons[draggedElement.index] = draggedElement;
+    } else if (draggedElement.type === 'sticker') {
+      updatedCanvasArray[selectedIndex].stickers[draggedElement.index] = draggedElement;
+    }
+
+    setCanvasArray(updatedCanvasArray);
+    setCurrentImage(updatedCanvasArray[selectedIndex]);
+
+    setIsDragging(false);
+    setDraggedElement(null);
+  };
+
+  const redrawCanvas = (newXPos, newYPos) => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Redraw background
+      if (currentImage?.bgImage) {
+        const bgImg = new Image();
+        bgImg.src = currentImage.bgImage;
+        bgImg.onload = () => {
+          ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+          drawContent(ctx, newXPos, newYPos);
+        };
+      } else {
+        drawCheckerboard(ctx, canvas);
+        drawContent(ctx, newXPos, newYPos);
+      }
+    }
+  };
+
+  const drawContent = (ctx, newXPos, newYPos) => {
+    // Draw the avatar
+    if (currentImage?.image) {
+      drawAvatar(ctx, canvasRef.current, currentImage.image);
+    }
+
+    // Draw icons
+    currentImage?.icons && currentImage?.icons.forEach((icon, i) => {
+      if (draggedElement && draggedElement.type === 'icon' && i === draggedElement.index) {
+        drawIcon(ctx, canvasRef.current, icon.src, newXPos, newYPos, icon.size);
+      } else {
+        drawIcon(ctx, canvasRef.current, icon.src, icon.xPos, icon.yPos, icon.size);
+      }
+    });
+
+    // Draw stickers
+    currentImage?.stickers && currentImage?.stickers.forEach((sticker, i) => {
+      if (draggedElement && draggedElement.type === 'sticker' && i === draggedElement.index) {
+        drawSticker(ctx, canvasRef.current, sticker.src, newXPos, newYPos, sticker.size);
+      } else {
+        drawSticker(ctx, canvasRef.current, sticker.src, sticker.xPos, sticker.yPos, sticker.size);
+      }
+    });
+  };
+
+
   const updateImageWidth = () => {
     if (containerRef.current) {
       const width = containerRef.current.getBoundingClientRect().width;
@@ -378,47 +508,51 @@ const EditorLayout = () => {
 
   const handleLoadIcon = (iconSrc, xPos = 0, yPos = 0, iconSize = 50) => {
     if (selectedIndex !== null) { // Ensure an avatar is selected
-        const updatedCanvasArray = [...canvasArray];
-        const updatedIcons = [
-            ...updatedCanvasArray[selectedIndex].icons,
-            { src: iconSrc, xPos, yPos, size: iconSize }
-        ];
-
-        updatedCanvasArray[selectedIndex] = {
-            ...updatedCanvasArray[selectedIndex],
-            icons: updatedIcons
-        };
-
-        setCanvasArray(updatedCanvasArray);
-        setCurrentImage(updatedCanvasArray[selectedIndex]); // Update currentImage to reflect the change
-
-        console.log("Icon added:", updatedCanvasArray[selectedIndex].icons);
-    } else {
-        console.error("No avatar selected to load the icon.");
-    }
-};
-
-const handleLoadSticker = (stickerSrc, xPos = 0, yPos = 0, stickerSize = 50) => {
-  if (selectedIndex !== null) { 
       const updatedCanvasArray = [...canvasArray];
-      const updatedStickers = [
-          ...updatedCanvasArray[selectedIndex].stickers,
-          { src: stickerSrc, xPos, yPos, size: stickerSize }
+      const updatedIcons = [
+        ...updatedCanvasArray[selectedIndex].icons,
+        { src: iconSrc, xPos, yPos, size: iconSize }
       ];
 
       updatedCanvasArray[selectedIndex] = {
-          ...updatedCanvasArray[selectedIndex],
-          stickers: updatedStickers
+        ...updatedCanvasArray[selectedIndex],
+        icons: updatedIcons
       };
 
       setCanvasArray(updatedCanvasArray);
       setCurrentImage(updatedCanvasArray[selectedIndex]); // Update currentImage to reflect the change
 
+      console.log("Icon added:", updatedCanvasArray[selectedIndex].icons);
+    } else {
+      console.error("No avatar selected to load the icon.");
+    }
+  };
+
+  const handleLoadSticker = (stickerSrc, xPos = 0, yPos = 0, stickerSize = 50) => {
+    if (selectedIndex !== null && canvasArray[selectedIndex]) { // Ensure an avatar is selected and the index exists in canvasArray
+      const updatedCanvasArray = [...canvasArray];
+
+      // Ensure the stickers array is initialized
+      if (!Array.isArray(updatedCanvasArray[selectedIndex].stickers)) {
+        updatedCanvasArray[selectedIndex].stickers = [];
+        console.log("Initialized stickers array for selected index:", selectedIndex);
+      }
+
+      console.log("Adding sticker with source:", stickerSrc);
+      console.log("Current stickers array before adding:", updatedCanvasArray[selectedIndex].stickers);
+
+      // Push the new sticker to the stickers array
+      updatedCanvasArray[selectedIndex].stickers.push({ src: stickerSrc, xPos, yPos, size: stickerSize });
+
+      setCanvasArray(updatedCanvasArray);
+      setCurrentImage(updatedCanvasArray[selectedIndex]); // Update currentImage to reflect the change
+
       console.log("Sticker added:", updatedCanvasArray[selectedIndex].stickers);
-  } else {
-      console.error("No avatar selected to load the sticker.");
-  }
-};
+    } else {
+      console.error("No avatar selected or invalid canvasArray index. Cannot load sticker.");
+    }
+  };
+
 
 
   const drawAvatar = (ctx, canvas, imageSrc) => {
@@ -512,67 +646,85 @@ const handleLoadSticker = (stickerSrc, xPos = 0, yPos = 0, stickerSize = 50) => 
 
   const drawSticker = (ctx, canvas, stickerSrc, xPos, yPos, stickerSize = 50) => {
     if (stickerSrc) {
-        const stickerImg = new Image();
-        stickerImg.src = stickerSrc;
+      const stickerImg = new Image();
+      stickerImg.src = stickerSrc;
 
-        stickerImg.onload = () => {
-            // If xPos or yPos are not provided, center the sticker by default
-            const xStart = xPos !== undefined ? xPos : (canvas.width - stickerSize) / 2;
-            const yStart = yPos !== undefined ? yPos : (canvas.height - stickerSize) / 2;
+      stickerImg.onload = () => {
+        // If xPos or yPos are not provided, center the sticker by default
+        const xStart = xPos !== undefined ? xPos : (canvas.width - stickerSize) / 2;
+        const yStart = yPos !== undefined ? yPos : (canvas.height - stickerSize) / 2;
 
-            // Draw the sticker on the canvas at the specified position
-            ctx.drawImage(stickerImg, xStart, yStart, stickerSize, stickerSize);
-        };
+        // Draw the sticker on the canvas at the specified position
+        ctx.drawImage(stickerImg, xStart, yStart, stickerSize, stickerSize);
+      };
 
-        stickerImg.onerror = (error) => {
-            console.error("Error loading sticker:", error);
-        };
+      stickerImg.onerror = (error) => {
+        console.error("Error loading sticker:", error);
+      };
     } else {
-        console.error("No stickerSrc provided for drawSticker");
+      console.error("No stickerSrc provided for drawSticker");
     }
-};
+  };
 
 
 
-useEffect(() => {
-  const canvas = canvasRef.current;
-  if (canvas) {
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    console.log(currentImage, "currentImagecurrentImagecurrentImage");
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      console.log(currentImage, "currentImagecurrentImagecurrentImage");
 
-    const drawContent = () => {
-      // Draw the avatar
-      if (currentImage?.image) {
-        drawAvatar(ctx, canvas, currentImage.image);
+      const drawContent = () => {
+        // Draw the avatar
+        if (currentImage?.image) {
+          drawAvatar(ctx, canvas, currentImage.image);
+        } else {
+          console.error("No image found for avatar");
+        }
+
+        // Draw the icons
+        if (currentImage?.icons) {
+          currentImage.icons.forEach((icon) => {
+            drawIcon(ctx, canvas, icon.src, icon.xPos, icon.yPos, icon.size);
+          });
+        }
+
+        // Draw the stickers
+        if (currentImage?.stickers) {
+          currentImage.stickers.forEach((sticker) => {
+            drawSticker(ctx, canvas, sticker.src, sticker.xPos, sticker.yPos, sticker.size);
+          });
+        }
+      };
+
+      // Draw background and then the content (avatar, icons, stickers)
+      if (currentImage?.bgImage) {
+        drawBackground(ctx, canvas, currentImage.bgImage, drawContent);
       } else {
-        console.error("No image found for avatar");
+        drawCheckerboard(ctx, canvas);
+        drawContent();
       }
+    }
+  }, [currentImage, canvasArray]);
 
-      // Draw the icons
-      if (currentImage?.icons) {
-        currentImage.icons.forEach((icon) => {
-          drawIcon(ctx, canvas, icon.src, icon.xPos, icon.yPos, icon.size);
-        });
-      }
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (canvas) {
+      canvas.addEventListener('mousedown', handleMouseDown);
+      canvas.addEventListener('mousemove', handleMouseMove);
+      canvas.addEventListener('mouseup', handleMouseUp);
+    }
 
-      // Draw the stickers
-      if (currentImage?.stickers) {
-        currentImage.stickers.forEach((sticker) => {
-          drawSticker(ctx, canvas, sticker.src, sticker.xPos, sticker.yPos, sticker.size);
-        });
+    return () => {
+      if (canvas) {
+        canvas.removeEventListener('mousedown', handleMouseDown);
+        canvas.removeEventListener('mousemove', handleMouseMove);
+        canvas.removeEventListener('mouseup', handleMouseUp);
       }
     };
+  }, [currentImage, draggedElement, isDragging]);
 
-    // Draw background and then the content (avatar, icons, stickers)
-    if (currentImage?.bgImage) {
-      drawBackground(ctx, canvas, currentImage.bgImage, drawContent);
-    } else {
-      drawCheckerboard(ctx, canvas);
-      drawContent();
-    }
-  }
-}, [currentImage, canvasArray, count]);
 
 
 
@@ -619,7 +771,7 @@ useEffect(() => {
                   handleButtonClickToRemoveTextarea={handleButtonClickToRemoveTextarea}
                 />
               ) : activeTab === "assets" ? (
-                <Assets backgrounds={backgrounds} stickers={stickers} icons={icons} videos={videos} musicTracks={musicTracks} images={images} handleLoadImage={handleBackgroundClick} handleLoadIcon={handleLoadIcon} handleLoadSticker ={handleLoadSticker } />
+                <Assets backgrounds={backgrounds} stickers={stickers} icons={icons} videos={videos} musicTracks={musicTracks} images={images} handleLoadImage={handleBackgroundClick} handleLoadIcon={handleLoadIcon} handleLoadSticker={handleLoadSticker} />
               ) : (
                 <div className="template">
                   {/* Other template code */}
