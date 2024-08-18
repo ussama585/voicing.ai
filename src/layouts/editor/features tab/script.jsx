@@ -1,12 +1,7 @@
-import { arrowDown } from 'assets/img/images';
-import { add } from 'assets/img/images';
-import { addTime } from 'assets/img/images';
-import { arrowUp } from 'assets/img/images';
-import { playBlackIcon } from 'assets/img/images'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react';
+import { arrowDown, arrowUp, playBlackIcon, add, addTime } from 'assets/img/images';
 
 const Script = ({ editorArray, handleEditorChange, handleButtonClick, handleButtonClickToRemoveTextarea }) => {
-
   const dropdownRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -21,7 +16,7 @@ const Script = ({ editorArray, handleEditorChange, handleButtonClick, handleButt
         return;
       } else {
         // Enter alone creates a new textarea
-        e.preventDefault(); // Prevent default action of adding a newline
+        e.preventDefault();
         handleButtonClick(); // Add a new textarea
       }
     }
@@ -44,15 +39,10 @@ const Script = ({ editorArray, handleEditorChange, handleButtonClick, handleButt
     <div className="text-left pe-2">
       <h5 className='bold-font colored-text font-semibold mb-3'>Script</h5>
       <hr className='h-seperator-one' />
-      {/* Base */}
-
+      
       <div className='flex items-center px-4 mb-4'>
-        <button className="bottom-border-btn inline-block " >
-          Text
-        </button>
-        <button className="bottom-border-btn inline-block " >
-          Audio
-        </button>
+        <button className="bottom-border-btn inline-block " >Text</button>
+        <button className="bottom-border-btn inline-block " >Audio</button>
       </div>
 
       <div>
@@ -115,8 +105,8 @@ const Script = ({ editorArray, handleEditorChange, handleButtonClick, handleButt
 
       <div className='flex items-center'>
         <hr className='h-seperator-two' style={{ width: "100%", height: "2px" }} />
-        <img src={add} alt="" className='cursor-pointer transition-transform transform hover:scale-105' style={{ margin: "10px", }} onClick={()=>{handleButtonClick()}} />
-        <img src={addTime} alt="" className='cursor-pointer transition-transform transform hover:scale-105' style={{ margin: "10px", }} onClick={()=>handleButtonClickToRemoveTextarea()} />
+        <img src={add} alt="" className='cursor-pointer transition-transform transform hover:scale-105' style={{ margin: "10px", }} onClick={handleButtonClick} />
+        <img src={addTime} alt="" className='cursor-pointer transition-transform transform hover:scale-105' style={{ margin: "10px", }} onClick={handleButtonClickToRemoveTextarea} />
         <hr className='h-seperator-two' style={{ width: "100%", height: "2px" }} />
       </div>
 
@@ -128,9 +118,8 @@ const Script = ({ editorArray, handleEditorChange, handleButtonClick, handleButt
           <button className='cursor-pointer transition-transform transform hover:scale-105 transparent-btn me-3'>Shift + Enter</button> <span>Create newline within paragraph</span>
         </div>
       </div>
-
     </div>
   );
-}
+};
 
 export default Script;

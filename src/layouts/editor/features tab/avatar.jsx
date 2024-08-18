@@ -1,9 +1,8 @@
-import React from 'react'
+import React from 'react';
 
 const Avatar = ({ dataArray, handleLoadImage, imageWidth, screenHeight }) => {
+  const thumbWidth = (imageWidth / 2 - 20);
 
-  const thumbWidth = (imageWidth / 2 - 20)
-console.log(screenHeight,"scrrennene")
   return (
     <>
       <h6 className='colored-text font-semibold mb-3'>Choose an Avatar</h6>
@@ -24,7 +23,7 @@ console.log(screenHeight,"scrrennene")
         ))}
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Avatar
+export default Avatar;

@@ -1,7 +1,7 @@
 import { download } from 'assets/img/images'
 import React from 'react'
 
-const Assets = ({ backgrounds, images, stickers, icons, musicTracks, videos, handleLoadImage }) => {
+const Assets = ({ backgrounds, images, stickers, icons, musicTracks, videos, handleLoadImage, handleLoadIcon, handleLoadSticker }) => {
   return (
     <>
       <div className="assets text-left pe-2 h-full" style={{ overflowY: "scroll" }}>
@@ -42,7 +42,7 @@ const Assets = ({ backgrounds, images, stickers, icons, musicTracks, videos, han
               <div
                 key={index}
                 className="mb-3 me-2"
-                onClick={() => handleLoadImage(row.image)}
+                onClick={() => handleLoadImage(row.image, 'img')}
               >
                 <img src={row.image} alt={index} className="cursor-pointer transition-transform transform hover:scale-105" />
               </div>
@@ -82,7 +82,7 @@ const Assets = ({ backgrounds, images, stickers, icons, musicTracks, videos, han
                 className="mb-3"
               // onClick={() => handleLoadVideo(row.music)}
               >
-                
+
                 <img src={row.thumbnail} alt={index} className="music-thumbnail cursor-pointer transition-transform transform hover:scale-105" />
               </div>
             ))}
@@ -100,7 +100,7 @@ const Assets = ({ backgrounds, images, stickers, icons, musicTracks, videos, han
               <div
                 key={index}
                 className="mb-3"
-              // onClick={() => handleLoadVideo(row.music)}
+                onClick={() => handleLoadIcon(row.image)}
               >
                 <img src={row.image} alt={index} className="cursor-pointer transition-transform transform hover:scale-105" />
               </div>
@@ -119,8 +119,8 @@ const Assets = ({ backgrounds, images, stickers, icons, musicTracks, videos, han
               <div
                 key={index}
                 className="mb-3"
-              // onClick={() => handleLoadVideo(row.music)}
-              >                
+              onClick={() => handleLoadSticker(row.image)}
+              >
                 <img src={row.image} alt={index} className="cursor-pointer transition-transform transform hover:scale-105" />
               </div>
             ))}

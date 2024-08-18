@@ -54,6 +54,8 @@ import { demo3 } from 'assets/img/images';
 import { demo2 } from 'assets/img/images';
 import { videoPlaceholder } from 'assets/img/images';
 import { musicFrame } from 'assets/img/images';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 // import { bg4 } from 'assets/img/images';
 // import { bg5 } from 'assets/img/images';
 
@@ -213,11 +215,11 @@ const icons = [
 ]
 
 const videos = [
-  { video:  video1, thumbnail: videoPlaceholder },
-  { video:  video2, thumbnail: videoPlaceholder },
+  { video: video1, thumbnail: videoPlaceholder },
+  { video: video2, thumbnail: videoPlaceholder },
 ]
 
-const musicTracks=[
+const musicTracks = [
   { music: music1, thumbnail: musicFrame },
   { music: music2, thumbnail: musicFrame },
 ]
@@ -230,6 +232,7 @@ const EditorLayout = () => {
   const [currentImage, setCurrentImage] = useState({ image: null, bgImage: null, title: '' });
   const [selectedIndex, setSelectedIndex] = useState(null); // Track the currently displayed avatar
   const [editorArray, setEditorArray] = useState([]);
+  const [count, setCount] = useState(0)
 
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
@@ -282,14 +285,28 @@ const EditorLayout = () => {
   const handleImageClick = (index, img, title) => {
     const updatedCanvasArray = [...canvasArray];
     if (index < updatedCanvasArray.length) {
-      updatedCanvasArray[index].image = img;
-      updatedCanvasArray[index].title = title;
+      updatedCanvasArray[index] = {
+        ...updatedCanvasArray[index],
+        image: img,
+        title: title,
+      };
     } else {
-      updatedCanvasArray.push({ image: img, title: title, bgImage: null, script: '', length: '' });
+      updatedCanvasArray.push({
+        index: canvasArray.length,
+        image: img,
+        title: title,
+        bgImage: null,
+        script: '',
+        length: '',
+        images: [],
+        icons: [], // Add icons array if not already present
+      });
     }
+
     setCanvasArray(updatedCanvasArray);
     setSelectedIndex(index); // Set the currently displayed avatar
-    setCurrentImage(updatedCanvasArray[index]);
+    setCurrentImage(updatedCanvasArray[index]); // Update currentImage with the selected avatar
+    setCount(prev => prev + 1); // Increment count
 
     if (editorArray.length < updatedCanvasArray.length) {
       setEditorArray(prev => [...prev, '']);
@@ -297,12 +314,19 @@ const EditorLayout = () => {
     }
   };
 
-  const handleBackgroundClick = (bgImg) => {
-    if (selectedIndex !== null) { // Ensure an avatar is selected
-      const updatedCanvasArray = [...canvasArray];
-      updatedCanvasArray[selectedIndex].bgImage = bgImg; // Update background only for the selected avatar
-      setCanvasArray(updatedCanvasArray);
-      setCurrentImage(updatedCanvasArray[selectedIndex]); // Update currentImage to reflect the change
+
+  const handleBackgroundClick = (bgImg, feature) => {
+    if (feature === 'img') {
+      if (currentImage.image != null) {
+        console.log(bgImg, "xxxxx", feature)
+      }
+    } else {
+      if (selectedIndex !== null) { // Ensure an avatar is selected
+        const updatedCanvasArray = [...canvasArray];
+        updatedCanvasArray[selectedIndex].bgImage = bgImg; // Update background only for the selected avatar
+        setCanvasArray(updatedCanvasArray);
+        setCurrentImage(updatedCanvasArray[selectedIndex]); // Update currentImage to reflect the change
+      }
     }
   };
   const handleButtonClick = (index) => {
@@ -352,89 +376,206 @@ const EditorLayout = () => {
     return timeInSeconds.toFixed(2);
   };
 
-  useEffect(() => {
-    const drawCanvas = () => {
-      const canvas = canvasRef.current;
-      if (canvas) {
-        const ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const handleLoadIcon = (iconSrc, xPos = 0, yPos = 0, iconSize = 50) => {
+    if (selectedIndex !== null) { // Ensure an avatar is selected
+        const updatedCanvasArray = [...canvasArray];
+        const updatedIcons = [
+            ...updatedCanvasArray[selectedIndex].icons,
+            { src: iconSrc, xPos, yPos, size: iconSize }
+        ];
 
-        // Function to draw the avatar image
-        const drawAvatar = () => {
-          if (currentImage?.image) {
-            const avatarImg = new Image();
-            avatarImg.src = currentImage.image;
-
-            avatarImg.onload = () => {
-              const imageAspectRatio = avatarImg.width / avatarImg.height;
-              const canvasAspectRatio = canvas.width / canvas.height;
-
-              let renderableWidth, renderableHeight, xStart, yStart;
-
-              if (imageAspectRatio < canvasAspectRatio) {
-                renderableHeight = canvas.height;
-                renderableWidth = avatarImg.width * (renderableHeight / avatarImg.height);
-                xStart = (canvas.width - renderableWidth) / 2;
-                yStart = 0;
-              } else {
-                renderableWidth = canvas.width;
-                renderableHeight = avatarImg.height * (renderableWidth / avatarImg.width);
-                xStart = 0;
-                yStart = (canvas.height - renderableHeight) / 2;
-              }
-
-              ctx.drawImage(avatarImg, xStart, yStart, renderableWidth, renderableHeight);
-            };
-          }
+        updatedCanvasArray[selectedIndex] = {
+            ...updatedCanvasArray[selectedIndex],
+            icons: updatedIcons
         };
 
-        // Draw the background image if present
-        if (currentImage?.bgImage) {
-          const bgImg = new Image();
-          bgImg.src = currentImage.bgImage;
+        setCanvasArray(updatedCanvasArray);
+        setCurrentImage(updatedCanvasArray[selectedIndex]); // Update currentImage to reflect the change
 
-          bgImg.onload = () => {
-            const imageAspectRatio = bgImg.width / bgImg.height;
-            const canvasAspectRatio = canvas.width / canvas.height;
+        console.log("Icon added:", updatedCanvasArray[selectedIndex].icons);
+    } else {
+        console.error("No avatar selected to load the icon.");
+    }
+};
 
-            let renderableWidth, renderableHeight, xStart, yStart;
+const handleLoadSticker = (stickerSrc, xPos = 0, yPos = 0, stickerSize = 50) => {
+  if (selectedIndex !== null) { 
+      const updatedCanvasArray = [...canvasArray];
+      const updatedStickers = [
+          ...updatedCanvasArray[selectedIndex].stickers,
+          { src: stickerSrc, xPos, yPos, size: stickerSize }
+      ];
 
-            // Cover logic: Ensure no blank spaces by covering the canvas fully
-            if (imageAspectRatio > canvasAspectRatio) {
-              renderableHeight = canvas.height;
-              renderableWidth = bgImg.width * (renderableHeight / bgImg.height);
-              xStart = (canvas.width - renderableWidth) / 2;
-              yStart = 0;
-            } else {
-              renderableWidth = canvas.width;
-              renderableHeight = bgImg.height * (renderableWidth / bgImg.width);
-              xStart = 0;
-              yStart = (canvas.height - renderableHeight) / 2;
-            }
+      updatedCanvasArray[selectedIndex] = {
+          ...updatedCanvasArray[selectedIndex],
+          stickers: updatedStickers
+      };
 
-            ctx.drawImage(bgImg, xStart, yStart, renderableWidth, renderableHeight);
-            drawAvatar(); // Draw the avatar after the background
-          };
+      setCanvasArray(updatedCanvasArray);
+      setCurrentImage(updatedCanvasArray[selectedIndex]); // Update currentImage to reflect the change
+
+      console.log("Sticker added:", updatedCanvasArray[selectedIndex].stickers);
+  } else {
+      console.error("No avatar selected to load the sticker.");
+  }
+};
+
+
+  const drawAvatar = (ctx, canvas, imageSrc) => {
+    if (imageSrc) {
+      const avatarImg = new Image();
+      avatarImg.src = imageSrc;
+
+      avatarImg.onload = () => {
+        const imageAspectRatio = avatarImg.width / avatarImg.height;
+        const canvasAspectRatio = canvas.width / canvas.height;
+
+        let renderableWidth, renderableHeight, xStart, yStart;
+
+        if (imageAspectRatio < canvasAspectRatio) {
+          renderableHeight = canvas.height;
+          renderableWidth = avatarImg.width * (renderableHeight / avatarImg.height);
+          xStart = (canvas.width - renderableWidth) / 2;
+          yStart = 0;
         } else {
-          // If no background image, draw checkerboard pattern
-          const squareSize = 10;
-          const numCols = Math.ceil(canvas.width / squareSize);
-          const numRows = Math.ceil(canvas.height / squareSize);
-
-          for (let i = 0; i < numCols; i++) {
-            for (let j = 0; j < numRows; j++) {
-              ctx.fillStyle = (i + j) % 2 === 0 ? '#cccccc' : '#ffffff';
-              ctx.fillRect(i * squareSize, j * squareSize, squareSize, squareSize);
-            }
-          }
-
-          drawAvatar(); // Draw the avatar if no background is present
+          renderableWidth = canvas.width;
+          renderableHeight = avatarImg.height * (renderableWidth / avatarImg.width);
+          xStart = 0;
+          yStart = (canvas.height - renderableHeight) / 2;
         }
+
+        ctx.drawImage(avatarImg, xStart, yStart, renderableWidth, renderableHeight);
+      };
+    }
+  };
+
+  const drawBackground = (ctx, canvas, bgImage, onComplete) => {
+    const bgImg = new Image();
+    bgImg.src = bgImage;
+
+    bgImg.onload = () => {
+      const imageAspectRatio = bgImg.width / bgImg.height;
+      const canvasAspectRatio = canvas.width / canvas.height;
+
+      let renderableWidth, renderableHeight, xStart, yStart;
+
+      if (imageAspectRatio > canvasAspectRatio) {
+        renderableHeight = canvas.height;
+        renderableWidth = bgImg.width * (renderableHeight / bgImg.height);
+        xStart = (canvas.width - renderableWidth) / 2;
+        yStart = 0;
+      } else {
+        renderableWidth = canvas.width;
+        renderableHeight = bgImg.height * (renderableWidth / bgImg.width);
+        xStart = 0;
+        yStart = (canvas.height - renderableHeight) / 2;
+      }
+
+      ctx.drawImage(bgImg, xStart, yStart, renderableWidth, renderableHeight);
+      onComplete(); // Draw avatar after background
+    };
+  };
+
+  const drawCheckerboard = (ctx, canvas, squareSize = 10) => {
+    const numCols = Math.ceil(canvas.width / squareSize);
+    const numRows = Math.ceil(canvas.height / squareSize);
+
+    for (let i = 0; i < numCols; i++) {
+      for (let j = 0; j < numRows; j++) {
+        ctx.fillStyle = (i + j) % 2 === 0 ? '#cccccc' : '#ffffff';
+        ctx.fillRect(i * squareSize, j * squareSize, squareSize, squareSize);
+      }
+    }
+  };
+
+  const drawIcon = (ctx, canvas, iconSrc, xPos, yPos, iconSize = 50) => {
+    if (iconSrc) {
+      const iconImg = new Image();
+      iconImg.src = iconSrc;
+
+      iconImg.onload = () => {
+        // If xPos or yPos are not provided, center the icon by default
+        const xStart = xPos !== undefined ? xPos : (canvas.width - iconSize) / 2;
+        const yStart = yPos !== undefined ? yPos : (canvas.height - iconSize) / 2;
+
+        // Draw the icon on the canvas at the specified position
+        ctx.drawImage(iconImg, xStart, yStart, iconSize, iconSize);
+      };
+
+      iconImg.onerror = (error) => {
+        console.error("Error loading icon:", error);
+      };
+    } else {
+      console.error("No iconSrc provided for drawIcon");
+    }
+  };
+
+  const drawSticker = (ctx, canvas, stickerSrc, xPos, yPos, stickerSize = 50) => {
+    if (stickerSrc) {
+        const stickerImg = new Image();
+        stickerImg.src = stickerSrc;
+
+        stickerImg.onload = () => {
+            // If xPos or yPos are not provided, center the sticker by default
+            const xStart = xPos !== undefined ? xPos : (canvas.width - stickerSize) / 2;
+            const yStart = yPos !== undefined ? yPos : (canvas.height - stickerSize) / 2;
+
+            // Draw the sticker on the canvas at the specified position
+            ctx.drawImage(stickerImg, xStart, yStart, stickerSize, stickerSize);
+        };
+
+        stickerImg.onerror = (error) => {
+            console.error("Error loading sticker:", error);
+        };
+    } else {
+        console.error("No stickerSrc provided for drawSticker");
+    }
+};
+
+
+
+useEffect(() => {
+  const canvas = canvasRef.current;
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    console.log(currentImage, "currentImagecurrentImagecurrentImage");
+
+    const drawContent = () => {
+      // Draw the avatar
+      if (currentImage?.image) {
+        drawAvatar(ctx, canvas, currentImage.image);
+      } else {
+        console.error("No image found for avatar");
+      }
+
+      // Draw the icons
+      if (currentImage?.icons) {
+        currentImage.icons.forEach((icon) => {
+          drawIcon(ctx, canvas, icon.src, icon.xPos, icon.yPos, icon.size);
+        });
+      }
+
+      // Draw the stickers
+      if (currentImage?.stickers) {
+        currentImage.stickers.forEach((sticker) => {
+          drawSticker(ctx, canvas, sticker.src, sticker.xPos, sticker.yPos, sticker.size);
+        });
       }
     };
 
-    drawCanvas();
-  }, [currentImage, canvasArray]);
+    // Draw background and then the content (avatar, icons, stickers)
+    if (currentImage?.bgImage) {
+      drawBackground(ctx, canvas, currentImage.bgImage, drawContent);
+    } else {
+      drawCheckerboard(ctx, canvas);
+      drawContent();
+    }
+  }
+}, [currentImage, canvasArray, count]);
+
+
+
 
 
   useEffect(() => {
@@ -478,7 +619,7 @@ const EditorLayout = () => {
                   handleButtonClickToRemoveTextarea={handleButtonClickToRemoveTextarea}
                 />
               ) : activeTab === "assets" ? (
-                <Assets backgrounds={backgrounds} stickers={stickers} icons={icons} videos={videos} musicTracks={musicTracks} images = {images} handleLoadImage={handleBackgroundClick} />
+                <Assets backgrounds={backgrounds} stickers={stickers} icons={icons} videos={videos} musicTracks={musicTracks} images={images} handleLoadImage={handleBackgroundClick} handleLoadIcon={handleLoadIcon} handleLoadSticker ={handleLoadSticker } />
               ) : (
                 <div className="template">
                   {/* Other template code */}
@@ -524,7 +665,6 @@ const EditorLayout = () => {
           <div>
             <img src={scale} alt="" />
             <div className='bottom-section flex gap-2'>
-              {console.log(canvasArray, "imagesArrayimagesArrayimagesArray")}
               {canvasArray.map((val, index) => {
                 const width = sizes[index]?.width || 120;
 
@@ -555,7 +695,7 @@ const EditorLayout = () => {
                             justifyContent: 'center',
                             position: 'relative',
                           }}
-                          onClick={() => handleImageClick(index, val.image, val.title)}
+                          onClick={() => handleImageClick(val.index, val.image, val.title)}
                         >
                           <div className="resizer"
                             style={{
