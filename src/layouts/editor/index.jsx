@@ -37,9 +37,9 @@ import {
 } from 'assets/img/images';
 import Assets from './features tab/assets';
 import { bg1 } from 'assets/img/images';
-import { bg4 } from 'assets/img/images';
-import { bg3 } from 'assets/img/images';
 import { bg2 } from 'assets/img/images';
+import { bg3 } from 'assets/img/images';
+import { bg4 } from 'assets/img/images';
 import { bg5 } from 'assets/img/images';
 
 const dataArray = [
