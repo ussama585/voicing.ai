@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { submit, preview, logo } from 'assets/img/images';
 import MenusSidebar from './menus/menus-sidebar';
 import Avatar from './features tab/avatar';
@@ -241,7 +241,7 @@ const EditorLayout = () => {
   const [draggedElement, setDraggedElement] = useState(null);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
 
-  const handleMouseDown = (event) => {
+  const handleMouseDown = useCallback((event) => {
     const canvas = canvasRef.current;
     const rect = canvas.getBoundingClientRect();
     const mouseX = event.clientX - rect.left;
@@ -280,9 +280,10 @@ const EditorLayout = () => {
         }
       }
     };
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [draggedElement,]);
 
-  const handleMouseMove = (event) => {
+  const handleMouseMove = useCallback((event) => {
     if (!isDragging || !draggedElement) return;
 
     const canvas = canvasRef.current;
@@ -301,9 +302,10 @@ const EditorLayout = () => {
 
     // Draw while moving
     redrawCanvas(newXPos, newYPos);
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentImage, isDragging]);
 
-  const handleMouseUp = () => {
+  const handleMouseUp = useCallback((event) => {
     if (!isDragging || !draggedElement) return;
 
     const updatedCanvasArray = [...canvasArray];
@@ -318,7 +320,8 @@ const EditorLayout = () => {
 
     setIsDragging(false);
     setDraggedElement(null);
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [handleMouseDown, handleMouseMove, handleMouseUp]);
 
   const redrawCanvas = (newXPos, newYPos) => {
     const canvas = canvasRef.current;
