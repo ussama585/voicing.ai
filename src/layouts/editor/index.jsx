@@ -263,6 +263,7 @@ const EditorLayout = () => {
     }
   };
 console.log(selectedIndex,"selectedIndexselectedIndexselectedIndex")
+console.log(selectedIndex,"selectedIndexselectedIndexselectedIndex")
   const handleButtonClick = (index) => {
     if (editorArray.length < canvasArray.length) {
       setEditorArray(prev => [...prev, '']);
