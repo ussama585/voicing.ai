@@ -13,15 +13,17 @@ const Assets = ({ backgrounds, handleLoadImage }) => {
         </div>
         <hr className='h-seperator-one' style={{ margin: "25px 0" }} />
 
-        {backgrounds.map((row, index) => (
-          <div
-            key={index}
-            className="background-images text-center  mb-3 me-2"
-            onClick={() => handleLoadImage(row.image)}
-          >
-            <img src={row.image} alt={row.title} className="cursor-pointer transition-transform transform hover:scale-105" />
-          </div>
-        ))}
+        <div className='background-images'>
+          {backgrounds.map((row, index) => (
+            <div
+              key={index}
+              className="mb-3 me-2"
+              onClick={() => handleLoadImage(row.image)}
+            >
+              <img src={row.image} alt={row.title} className="cursor-pointer transition-transform transform hover:scale-105" />
+            </div>
+          ))}
+        </div>
 
       </div >
     </>
