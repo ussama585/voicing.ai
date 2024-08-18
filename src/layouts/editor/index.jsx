@@ -262,7 +262,7 @@ const EditorLayout = () => {
       setCurrentImage(updatedCanvasArray[selectedIndex]); // Update currentImage to reflect the change
     }
   };
-
+console.log(selectedIndex,"selectedIndexselectedIndexselectedIndex")
   const handleButtonClick = (index) => {
     if (editorArray.length < canvasArray.length) {
       setEditorArray(prev => [...prev, '']);
