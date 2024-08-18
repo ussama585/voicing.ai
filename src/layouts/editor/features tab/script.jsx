@@ -41,7 +41,7 @@ const Script = ({ editorArray, handleEditorChange, handleButtonClick, handleButt
   }, [dropdownRef]);
 
   return (
-    <div className="text-left pe-3">
+    <div className="text-left pe-2">
       <h5 className='bold-font colored-text font-semibold mb-3'>Script</h5>
       <hr className='h-seperator-one' />
       {/* Base */}

@@ -39,8 +39,23 @@ import Assets from './features tab/assets';
 import { bg1 } from 'assets/img/images';
 import { bg2 } from 'assets/img/images';
 import { bg3 } from 'assets/img/images';
-import { bg4 } from 'assets/img/images';
-import { bg5 } from 'assets/img/images';
+import { sticker1 } from 'assets/img/images';
+import { sticker2 } from 'assets/img/images';
+import { sticker3 } from 'assets/img/images';
+import { icon1 } from 'assets/img/images';
+import { icon2 } from 'assets/img/images';
+import { icon3 } from 'assets/img/images';
+import { video1 } from 'assets/videos';
+import { video2 } from 'assets/videos';
+import { music1 } from 'assets/img/images';
+import { music2 } from 'assets/img/images';
+import { demo1 } from 'assets/img/images';
+import { demo3 } from 'assets/img/images';
+import { demo2 } from 'assets/img/images';
+import { videoPlaceholder } from 'assets/img/images';
+import { musicFrame } from 'assets/img/images';
+// import { bg4 } from 'assets/img/images';
+// import { bg5 } from 'assets/img/images';
 
 const dataArray = [
   {
@@ -175,8 +190,36 @@ const backgrounds = [
   { image: bg1 },
   { image: bg2 },
   { image: bg3 },
-  { image: bg4 },
-  { image: bg5 },
+  // { image: bg4 },
+  // { image: bg5 },
+]
+
+const images = [
+  { image: demo1 },
+  { image: demo2 },
+  { image: demo3 },
+]
+
+const stickers = [
+  { image: sticker1 },
+  { image: sticker2 },
+  { image: sticker3 },
+]
+
+const icons = [
+  { image: icon1 },
+  { image: icon2 },
+  { image: icon3 },
+]
+
+const videos = [
+  { video:  video1, thumbnail: videoPlaceholder },
+  { video:  video2, thumbnail: videoPlaceholder },
+]
+
+const musicTracks=[
+  { music: music1, thumbnail: musicFrame },
+  { music: music2, thumbnail: musicFrame },
 ]
 
 const EditorLayout = () => {
@@ -262,8 +305,6 @@ const EditorLayout = () => {
       setCurrentImage(updatedCanvasArray[selectedIndex]); // Update currentImage to reflect the change
     }
   };
-console.log(selectedIndex,"selectedIndexselectedIndexselectedIndex")
-console.log(selectedIndex,"selectedIndexselectedIndexselectedIndex")
   const handleButtonClick = (index) => {
     if (editorArray.length < canvasArray.length) {
       setEditorArray(prev => [...prev, '']);
@@ -406,161 +447,150 @@ console.log(selectedIndex,"selectedIndexselectedIndexselectedIndex")
       <nav className='flex justify-between items-center'>
         <img src={logo} alt="Logo" className='logo' />
         <p className='title mb-0'></p>
-        <div className="nav-btn flex justify-between items-center">
+        <div className="nav-btn flex space-x-4 items-center">
           <button className='simple-btn'>Feedback</button>
-          <button className='text-dark simple-btn flex justify-content items-center'>
+          <button className='text-dark simple-btn flex items-center space-x-1'>
             <img src={preview} alt="Preview" className='me-1' />Preview
           </button>
-          <button className='text-white colored-btn flex justify-content items-center'>
+          <button className='text-white colored-btn flex items-center space-x-1'>
             <img src={submit} alt="Submit" className='me-1' />Submit
           </button>
         </div>
       </nav>
-      <div className="row">
-        <div className="col-4">
-          <div className="row h-full">
-            <div className="col-3">
-              <MenusSidebar activeTab={activeTab} setActiveTab={setActiveTab} handleChangeTab={handleChangeTab} />
-            </div>
-            <div className="col-9 ps-0">
-              <div ref={containerRef} id='menu-tab-options' className="menu-tab-options">
-                {activeTab === "avatar" ? (
-                  <Avatar dataArray={dataArray} handleLoadImage={handleImageClick} imageWidth={imageWidth} screenHeight={screenHeight} />
-                ) : activeTab === "script" ? (
-                  <Script
-                    editorArray={editorArray}
-                    handleEditorChange={handleEditorChange}
-                    handleButtonClick={handleButtonClick}
-                    handleButtonClickToRemoveTextarea={handleButtonClickToRemoveTextarea}
-                  />
-                ) : activeTab === "assets" ? (
-                  <Assets backgrounds={backgrounds} handleLoadImage={handleBackgroundClick} />
-                ) : (
-                  <div className="template">
-                    {/* Other template code */}
-                  </div>
-                )}
-              </div>
+
+      <div className="grid grid-cols-12">
+        <div className="col-span-1 flex flex-col h-full" style={{ maxWidth: "88px" }}>
+          <div className="h-full">
+            <MenusSidebar activeTab={activeTab} setActiveTab={setActiveTab} handleChangeTab={handleChangeTab} />
+          </div>
+
+        </div>
+        <div className="col-span-3 h-full" style={{ maxWidth: "336px", position: "relative" }}>
+          <div className="h-full ps-0" style={{ position: "absolute", left: "-16px" }}>
+            <div ref={containerRef} id='menu-tab-options' className="menu-tab-options" style={{ overflowY: "hidden" }}>
+              {activeTab === "avatar" ? (
+                <Avatar dataArray={dataArray} handleLoadImage={handleImageClick} imageWidth={imageWidth} screenHeight={screenHeight} />
+              ) : activeTab === "script" ? (
+                <Script
+                  editorArray={editorArray}
+                  handleEditorChange={handleEditorChange}
+                  handleButtonClick={handleButtonClick}
+                  handleButtonClickToRemoveTextarea={handleButtonClickToRemoveTextarea}
+                />
+              ) : activeTab === "assets" ? (
+                <Assets backgrounds={backgrounds} stickers={stickers} icons={icons} videos={videos} musicTracks={musicTracks} images = {images} handleLoadImage={handleBackgroundClick} />
+              ) : (
+                <div className="template">
+                  {/* Other template code */}
+                </div>
+              )}
             </div>
           </div>
         </div>
-        <div className="col-8">
-          <div className='py-5'>
-            {/* canvas */}
-            <div className='flex justify-center item-center'>
-              <div style={{ width: "600px", height: "370px" }}>
-                <canvas ref={canvasRef} width="400" height="200" style={{ width: "100%" }} />
+
+        <div className="col-span-8 py-5">
+          {/* canvas */}
+          <div className='flex justify-center items-center'>
+            <div style={{ width: "600px", height: "370px" }}>
+              <canvas ref={canvasRef} width="400" height="200" style={{ width: "100%" }} />
+            </div>
+          </div>
+
+          <div style={{ height: "40px" }}>
+            <div className="grid grid-cols-12 gap-4">
+              <div className="col-span-4 flex items-center">
+                <button className="cursor-pointer transition-transform transform hover:scale-105 me-3"><img src={frameSplitter} alt="" /></button>
+                <button className="cursor-pointer transition-transform transform hover:scale-105 me-3"><img src={volume} alt="" /></button>
+                <button className="cursor-pointer transition-transform transform hover:scale-105 flex items-center space-x-2" style={{ padding: "0 10px" }}>Landscape<img src={arrowDown} alt="" /></button>
+              </div>
+
+              <div className="col-span-3 flex justify-center items-center">
+                <img src={playBtn} alt="" />
+                <p className="text-xs mb-0">00:00:00 | 00:00:00</p>
+              </div>
+
+              <div className="col-span-5 flex justify-between items-center pe-2">
+                <button className="cursor-pointer transition-transform transform hover:scale-105"><img src={autoLayout} alt="" /></button>
+                <button className="cursor-pointer transition-transform transform hover:scale-105"><img src={frameDivider} alt="" /></button>
+                <button className="cursor-pointer transition-transform transform hover:scale-105"><img src={zoomOut} alt="" /></button>
+                <button className="cursor-pointer transition-transform transform hover:scale-105"><img src={volumeBar} alt="" /></button>
+                <button className="cursor-pointer transition-transform transform hover:scale-105"><img src={zoomIn} alt="" /></button>
+                <button className="cursor-pointer transition-transform transform hover:scale-105"><img src={fitScreen} alt="" /></button>
+                <button className="cursor-pointer transition-transform transform hover:scale-105"><img src={Option} alt="" /></button>
               </div>
             </div>
-            <div style={{ height: "40px" }}>
-              <div className="row">
-                <div className="col-4">
-                  <div className="flex items-center">
-                    <button className="cursor-pointer transition-transform transform hover:scale-105 me-3"><img src={frameSplitter} alt="" /></button>
-                    <button className="cursor-pointer transition-transform transform hover:scale-105 me-3"><img src={volume} alt="" /></button>
-                    <button className="cursor-pointer transition-transform transform hover:scale-105 flex items-center" style={{ padding: "0 10px" }}>Landscape<img src={arrowDown} alt="" /></button>
-                  </div>
-                </div>
-                <div className="col-3">
-                  <div className='flex justify-center items-center'>
-                    <img src={playBtn} alt="" />
-                    <p style={{ fontSize: "12px", marginBottom: "0" }}>00:00:00 | 00:00:00</p>
-                  </div>
-                </div>
-                <div className="col-5">
-                  <div className="flex justify-between items-center pe-2">
-                    <button className="cursor-pointer transition-transform transform hover:scale-105"><img src={autoLayout} alt="" /></button>
-                    <button className="cursor-pointer transition-transform transform hover:scale-105"><img src={frameDivider} alt="" /></button>
-                    <button className="cursor-pointer transition-transform transform hover:scale-105"><img src={zoomOut} alt="" /></button>
-                    <button className="cursor-pointer transition-transform transform hover:scale-105"><img src={volumeBar} alt="" /></button>
-                    <button className="cursor-pointer transition-transform transform hover:scale-105"><img src={zoomIn} alt="" /></button>
-                    <button className="cursor-pointer transition-transform transform hover:scale-105"><img src={fitScreen} alt="" /></button>
-                    <button className="cursor-pointer transition-transform transform hover:scale-105"><img src={Option} alt="" /></button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div>
-              <img src={scale} alt="" />
-              <div className='bottom-section' style={{ display: 'flex', gap: '10px' }}>
-                {console.log(canvasArray, "imagesArrayimagesArrayimagesArray")}
-                {canvasArray.map((val, index) => {
-                  const width = sizes[index]?.width || 120;
+          </div>
 
-                  return (
-                    <div key={index}>
-                      <div className='timeline' style={{ width: `max-content`, }}>
-                        {val.title && (
-                          <p className="" style={{
-                            textOverflow: 'ellipsis',
-                            overflow: 'hidden',
-                            whiteSpace: 'nowrap',
-                            fontSize: '12px',
-                            padding: '3px',
-                            color: '#fff',
-                            marginRight: '5px',
-                          }}>{val.title}</p>
-                        )}
-                        <div style={{
-                          background: "#E7EDFF", padding: "2px 10px",
-                          borderRadius: "10px"
-                        }}>
-                          <div key={index}
-                            className="thumbnail-frame"
-                            ref={thumbnailRef}
-                            style={{
-                              width: `${width}px`,
-                              height: '62px',
-                              backgroundSize: 'contain',
-                              backgroundRepeat: 'repeat',
-                              backgroundImage: `url(${val.image})`,
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              position: 'relative',
-                            }}
-                            onClick={() => handleImageClick(index, val.image, val.title)}
-                          >
-                            <div className="resizer"
-                              style={{
-                                width: '10px',
-                                height: '100%',
-                                position: 'absolute',
-                                right: "-9px",
-                                top: 0,
-                                cursor: 'e-resize',
-                              }}
-                              onMouseDown={(e) => handleResize(e, index)}
-                            />
-                          </div>
-                        </div>
+          <div>
+            <img src={scale} alt="" />
+            <div className='bottom-section flex gap-2'>
+              {console.log(canvasArray, "imagesArrayimagesArrayimagesArray")}
+              {canvasArray.map((val, index) => {
+                const width = sizes[index]?.width || 120;
 
-                      </div>
-                      {val.script && (
-                        <p className="text-gray-700" style={{
+                return (
+                  <div key={index}>
+                    <div className='timeline' style={{ width: `max-content`, }}>
+                      {val.title && (
+                        <p className="text-sm text-white mb-1" style={{
                           textOverflow: 'ellipsis',
                           overflow: 'hidden',
                           whiteSpace: 'nowrap',
-                          border: '2px dashed rgb(28 39 76 / 12%)',
-                          borderRadius: '10px',
-                          fontSize: '12px',
-                          padding: '4px 5px',
-                          background: 'rgb(28 39 76 / 3%)',
-                          color: '#000',
+                          padding: '3px',
                           marginRight: '5px',
-                          marginTop: "5px",
-                          maxWidth: `${width}`
-                        }}>{val.script}</p>
+                        }}>{val.title}</p>
                       )}
+                      <div className="bg-blue-100 rounded-md px-2 py-1">
+                        <div key={index}
+                          className="thumbnail-frame"
+                          ref={thumbnailRef}
+                          style={{
+                            width: `${width}px`,
+                            height: '62px',
+                            backgroundSize: 'contain',
+                            backgroundRepeat: 'repeat',
+                            backgroundImage: `url(${val.image})`,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            position: 'relative',
+                          }}
+                          onClick={() => handleImageClick(index, val.image, val.title)}
+                        >
+                          <div className="resizer"
+                            style={{
+                              width: '10px',
+                              height: '100%',
+                              position: 'absolute',
+                              right: "-9px",
+                              top: 0,
+                              cursor: 'e-resize',
+                            }}
+                            onMouseDown={(e) => handleResize(e, index)}
+                          />
+                        </div>
+                      </div>
+
                     </div>
-                  );
-                })}
-              </div>
+                    {val.script && (
+                      <p className="text-xs bg-gray-200 border-dashed border-2 border-gray-400 rounded-md p-2 mt-1" style={{
+                        textOverflow: 'ellipsis',
+                        overflow: 'hidden',
+                        whiteSpace: 'nowrap',
+                        color: '#000',
+                        marginRight: '5px',
+                        maxWidth: `${width}px`
+                      }}>{val.script}</p>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
       </div>
     </div>
+
   );
 }
 

@@ -7,11 +7,11 @@ console.log(screenHeight,"scrrennene")
   return (
     <>
       <h6 className='colored-text font-semibold mb-3'>Choose an Avatar</h6>
-      <div className="flex justify-between items-center ps-1 pe-3">
+      <div className="flex justify-between items-center ps-1 pe-2">
         <p>My Saved Avatars</p>
         <button className='text-white colored-btn'>Create Avatar</button>
       </div>
-      <div className="template" style={{ overflowY: "scroll", maxHeight: `calc(${screenHeight}px - 100px)` }}>
+      <div className="template h-full" style={{ overflowY: "scroll" }}>
         {dataArray.map((row, index) => (
           <div
             key={index}

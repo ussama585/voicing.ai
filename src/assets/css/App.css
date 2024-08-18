@@ -25,7 +25,7 @@ h5.bold-font {
 }
 
 h6 {
-	font-size: 16px;
+	font-size: 14px;
 	font-weight: 400;
 	font-family: "Plus Jakarta Sans", sans-serif;
 	font-optical-sizing: auto;
@@ -64,6 +64,27 @@ option {
 	border-radius: 10px;
 	font-size: 12px;
 	min-width: 100px;
+}
+
+/* Target the entire scrollbar */
+::-webkit-scrollbar {
+	width: 6px; /* Change the width of the scrollbar */
+}
+
+/* Target the scrollbar track */
+::-webkit-scrollbar-track {
+	background: #f1f1f1; /* Color of the scrollbar track */
+}
+
+/* Target the scrollbar thumb */
+::-webkit-scrollbar-thumb {
+	background: #888; /* Color of the scrollbar handle */
+	border-radius: 10px; /* Optional: round the corners */
+}
+
+/* Hover effect for the scrollbar handle */
+::-webkit-scrollbar-thumb:hover {
+	background: #555; /* Darker color on hover */
 }
 
 /* global end */
@@ -246,6 +267,7 @@ option {
 	overflow-x: scroll;
 	scrollbar-width: none;
 	-ms-overflow-style: none;
+	padding: 0 4px;
 }
 
 .bottom-section::-webkit-scrollbar {
@@ -302,6 +324,17 @@ option {
 	height: 93px;
 	border-radius: 5px;
 	object-fit: cover;
+}
+
+.background-images img.music-thumbnail {
+	width: 140px;
+	height: 80px;
+	border-radius: 5px;
+	object-fit: cover;
+}
+
+.background-images>div:not(:last-child) {
+	margin-right: 10px;
 }
 
 .template img {

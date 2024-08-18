@@ -33,6 +33,7 @@ export {default as demo2} from './demo2.png'
 export {default as demo3} from './demo3.png'
 
 export {default as scale} from './scale.png'
+export {default as videoPlaceholder} from './video-placeholder.jpg'
 
 export {default as Option} from './option.svg'
 export {default as fitScreen} from './fit-screen.svg'
@@ -90,3 +91,21 @@ export {default as bg2} from '../images/backgrounds/bg-2.jpg'
 export {default as bg3} from '../images/backgrounds/bg-3.jpg'
 export {default as bg4} from '../images/backgrounds/bg-4.jpg'
 export {default as bg5} from '../images/backgrounds/bg-5.jpg'
+
+// stickers
+export {default as sticker1} from '../images/logos/logo1.png'
+export {default as sticker2} from '../images/logos/logo2.png'
+export {default as sticker3} from '../images/logos/logo4.png'
+
+// icons
+export {default as icon1} from '../images/icons/icon1.png'
+export {default as icon2} from '../images/icons/icon2.png'
+export {default as icon3} from '../images/icons/icon3.png'
+
+//music
+export {default as music1} from '../images/music/sound1.mp3'
+export {default as music2} from '../images/music/sound2.mp3'
+
+//video
+export {default as video1} from '../images/videos/video1 (2).mp4'
+export {default as video2} from '../images/videos/video1 (2).mp4'
