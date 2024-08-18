@@ -83,3 +83,10 @@ export {default as avatar18} from '../avatars/18.webp'
 // assets
 export {default as download} from './Download.svg'
 export {default as musicFrame} from './music-frame.svg'
+
+// backgrounds
+export {default as bg1} from '../images/backgrounds/bg-1.jpg'
+export {default as bg2} from '../images/backgrounds/bg-2.jpg'
+export {default as bg3} from '../images/backgrounds/bg-3.jpg'
+export {default as bg4} from '../images/backgrounds/bg-4.jpg'
+export {default as bg5} from '../images/backgrounds/bg-5.jpg'

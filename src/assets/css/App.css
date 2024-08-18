@@ -33,7 +33,7 @@ h6 {
 
 button {
 	font-family: "Inter";
-  font-optical-sizing: auto;
+	font-optical-sizing: auto;
 	font-weight: 400;
 }
 
@@ -51,6 +51,7 @@ option {
 	height: 1px !important;
 	border-radius: 30px;
 }
+
 .h-seperator-two {
 	background-color: #a3a3a3;
 	height: 1px !important;
@@ -125,9 +126,17 @@ option {
 }
 
 .frame-btn button {
-	background: linear-gradient(to right, #2FA5F6, #4318FF);
+	background: linear-gradient(to right, #4318FF, #2FA5F6);
 	padding: 8px 16px;
 	border-radius: 8px;
+}
+
+.assets .frame-btn button {
+	background: linear-gradient(to right, #4318FF, #2FA5F6);
+	padding: 6px 16px;
+	border-radius: 8px;
+	font-size: 14px;
+	width: 100%;
 }
 
 .editor-layout nav {
@@ -281,8 +290,18 @@ option {
 }
 
 /* avatar */
-.template-image {
-	/* max-width: 140px; */
+.background-images {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	width: 100%;
+}
+
+.background-images img {
+	width: 93px;
+	height: 93px;
+	border-radius: 5px;
+	object-fit: cover;
 }
 
 .template img {
@@ -321,7 +340,7 @@ option {
 	transform: scaleX(0);
 	transition: transform 0.3s ease;
 	transform-origin: right;
-  font-optical-sizing: auto;
+	font-optical-sizing: auto;
 	font-family: "Inter", sans-serif !important;
 }
 

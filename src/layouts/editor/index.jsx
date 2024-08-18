@@ -36,130 +36,161 @@ import {
   avatar18
 } from 'assets/img/images';
 import Assets from './features tab/assets';
+import { bg1 } from 'assets/img/images';
+import { bg4 } from 'assets/img/images';
+import { bg3 } from 'assets/img/images';
+import { bg2 } from 'assets/img/images';
+import { bg5 } from 'assets/img/images';
 
 const dataArray = [
   {
     image: avatar1,
     title: "Chris in black suit",
     script: '',
-    length: ''
+    length: '',
+    bgImage: null,
   },
   {
     image: avatar2,
     title: "Chris in beige suit",
     script: '',
-    length: ''
+    length: '',
+    bgImage: null,
   },
   {
     image: avatar3,
     title: "Voicing Ai",
     script: '',
-    length: ''
+    length: '',
+    bgImage: null,
   },
   {
     image: avatar4,
     title: "Chris in black suit",
     script: '',
-    length: ''
+    length: '',
+    bgImage: null,
   },
   {
     image: avatar5,
     title: "Chris in beige suit",
     script: '',
-    length: ''
+    length: '',
+    bgImage: null,
   },
   {
     image: avatar6,
     title: "Voicing Ai",
     script: '',
-    length: ''
+    length: '',
+    bgImage: null,
   },
   {
     image: avatar7,
     title: "Voicing Ai",
     script: '',
-    length: ''
+    length: '',
+    bgImage: null,
   },
   {
     image: avatar8,
     title: "Chris in black suit",
     script: '',
-    length: ''
+    length: '',
+    bgImage: null,
   },
   {
     image: avatar9,
     title: "Chris in beige suit",
     script: '',
-    length: ''
+    length: '',
+    bgImage: null,
   },
   {
     image: avatar10,
     title: "Voicing Ai",
     script: '',
-    length: ''
+    length: '',
+    bgImage: null,
   },
   {
     image: avatar11,
     title: "Chris in black suit",
     script: '',
-    length: ''
+    length: '',
+    bgImage: null,
   },
   {
     image: avatar12,
     title: "Chris in beige suit",
     script: '',
-    length: ''
+    length: '',
+    bgImage: null,
   },
   {
     image: avatar13,
     title: "Voicing Ai",
     script: '',
-    length: ''
+    length: '',
+    bgImage: null,
   },
   {
     image: avatar14,
     title: "Voicing Ai",
     script: '',
-    length: ''
+    length: '',
+    bgImage: null,
   },
   {
     image: avatar15,
     title: "Chris in black suit",
     script: '',
-    length: ''
+    length: '',
+    bgImage: null,
   },
   {
     image: avatar16,
     title: "Chris in beige suit",
     script: '',
-    length: ''
+    length: '',
+    bgImage: null,
   },
   {
     image: avatar17,
     title: "Voicing Ai",
     script: '',
-    length: ''
+    length: '',
+    bgImage: null,
   },
   {
     image: avatar18,
     title: "Voicing Ai",
     script: '',
-    length: ''
+    length: '',
+    bgImage: null,
   },
 ]
+
+const backgrounds = [
+  { image: bg1 },
+  { image: bg2 },
+  { image: bg3 },
+  { image: bg4 },
+  { image: bg5 },
+]
+
 const EditorLayout = () => {
 
-  const [screenHeight, setScreenHeight] = useState("")
-
+  const [screenHeight, setScreenHeight] = useState(window.innerHeight);
   const [activeTab, setActiveTab] = useState("avatar");
   const [canvasArray, setCanvasArray] = useState([]);
-  const [currentImage, setCurrentImage] = useState({ image: null, title: '' });
-  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [currentImage, setCurrentImage] = useState({ image: null, bgImage: null, title: '' });
+  const [selectedIndex, setSelectedIndex] = useState(null); // Track the currently displayed avatar
   const [editorArray, setEditorArray] = useState([]);
 
   const canvasRef = useRef(null);
-  const thumbnailRef = useRef(null);
   const containerRef = useRef(null);
+  const thumbnailRef = useRef(null);
   const [sizes, setSizes] = useState(canvasArray.map(() => ({ width: 130 })));
   const [imageWidth, setImageWidth] = useState(0);
 
@@ -205,12 +236,30 @@ const EditorLayout = () => {
     setActiveTab(tab);
   };
 
-  const handleImageClick = (index, img) => {
-    setCurrentImage(prev => ({ ...prev, image: img }));
-    setSelectedIndex(index);
-    if (editorArray.length < canvasArray.length) {
+  const handleImageClick = (index, img, title) => {
+    const updatedCanvasArray = [...canvasArray];
+    if (index < updatedCanvasArray.length) {
+      updatedCanvasArray[index].image = img;
+      updatedCanvasArray[index].title = title;
+    } else {
+      updatedCanvasArray.push({ image: img, title: title, bgImage: null, script: '', length: '' });
+    }
+    setCanvasArray(updatedCanvasArray);
+    setSelectedIndex(index); // Set the currently displayed avatar
+    setCurrentImage(updatedCanvasArray[index]);
+
+    if (editorArray.length < updatedCanvasArray.length) {
       setEditorArray(prev => [...prev, '']);
       setActiveTab('script');
+    }
+  };
+
+  const handleBackgroundClick = (bgImg) => {
+    if (selectedIndex !== null) { // Ensure an avatar is selected
+      const updatedCanvasArray = [...canvasArray];
+      updatedCanvasArray[selectedIndex].bgImage = bgImg; // Update background only for the selected avatar
+      setCanvasArray(updatedCanvasArray);
+      setCurrentImage(updatedCanvasArray[selectedIndex]); // Update currentImage to reflect the change
     }
   };
 
@@ -218,31 +267,23 @@ const EditorLayout = () => {
     if (editorArray.length < canvasArray.length) {
       setEditorArray(prev => [...prev, '']);
     }
-  }
+  };
 
   const handleButtonClickToRemoveTextarea = () => {
     if (editorArray.length > 0) {
-      // Remove the last element from editorArray
       setEditorArray((prevArray) => prevArray.slice(0, -1));
 
-      // Clear the script field of the last item in canvasArray
       setCanvasArray((prev) => {
         const updatedArray = [...prev];
         const lastIndex = editorArray.length - 1;
 
         if (lastIndex >= 0) {
-          updatedArray[lastIndex] = { ...updatedArray[lastIndex], script: '' };
+          updatedArray[lastIndex].script = '';
         }
 
         return updatedArray;
       });
     }
-  };
-
-
-  const handleLoadImage = (row, index) => {
-    setCurrentImage((prev) => ({ ...prev, image: row.image, title: row.title }));
-    setCanvasArray(prev => [...prev, { ...row, script: '', length: '' }]);
   };
 
   const handleEditorChange = (e, index) => {
@@ -270,74 +311,94 @@ const EditorLayout = () => {
   };
 
   useEffect(() => {
-    if (canvasRef.current) {
+    const drawCanvas = () => {
       const canvas = canvasRef.current;
-      const ctx = canvas.getContext('2d');
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Draw the checkerboard pattern
-      const squareSize = 10;
-      const numCols = Math.ceil(canvas.width / squareSize);
-      const numRows = Math.ceil(canvas.height / squareSize);
+        // Function to draw the avatar image
+        const drawAvatar = () => {
+          if (currentImage?.image) {
+            const avatarImg = new Image();
+            avatarImg.src = currentImage.image;
 
-      for (let i = 0; i < numCols; i++) {
-        for (let j = 0; j < numRows; j++) {
-          if ((i + j) % 2 === 0) {
-            ctx.fillStyle = '#cccccc'; // Light grey
-          } else {
-            ctx.fillStyle = '#ffffff'; // White
+            avatarImg.onload = () => {
+              const imageAspectRatio = avatarImg.width / avatarImg.height;
+              const canvasAspectRatio = canvas.width / canvas.height;
+
+              let renderableWidth, renderableHeight, xStart, yStart;
+
+              if (imageAspectRatio < canvasAspectRatio) {
+                renderableHeight = canvas.height;
+                renderableWidth = avatarImg.width * (renderableHeight / avatarImg.height);
+                xStart = (canvas.width - renderableWidth) / 2;
+                yStart = 0;
+              } else {
+                renderableWidth = canvas.width;
+                renderableHeight = avatarImg.height * (renderableWidth / avatarImg.width);
+                xStart = 0;
+                yStart = (canvas.height - renderableHeight) / 2;
+              }
+
+              ctx.drawImage(avatarImg, xStart, yStart, renderableWidth, renderableHeight);
+            };
           }
-          ctx.fillRect(i * squareSize, j * squareSize, squareSize, squareSize);
-        }
-      }
+        };
 
-      if (currentImage.image) {
-        const img = new Image();
-        img.src = currentImage.image;
-        img.onload = () => {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Draw the background image if present
+        if (currentImage?.bgImage) {
+          const bgImg = new Image();
+          bgImg.src = currentImage.bgImage;
+
+          bgImg.onload = () => {
+            const imageAspectRatio = bgImg.width / bgImg.height;
+            const canvasAspectRatio = canvas.width / canvas.height;
+
+            let renderableWidth, renderableHeight, xStart, yStart;
+
+            // Cover logic: Ensure no blank spaces by covering the canvas fully
+            if (imageAspectRatio > canvasAspectRatio) {
+              renderableHeight = canvas.height;
+              renderableWidth = bgImg.width * (renderableHeight / bgImg.height);
+              xStart = (canvas.width - renderableWidth) / 2;
+              yStart = 0;
+            } else {
+              renderableWidth = canvas.width;
+              renderableHeight = bgImg.height * (renderableWidth / bgImg.width);
+              xStart = 0;
+              yStart = (canvas.height - renderableHeight) / 2;
+            }
+
+            ctx.drawImage(bgImg, xStart, yStart, renderableWidth, renderableHeight);
+            drawAvatar(); // Draw the avatar after the background
+          };
+        } else {
+          // If no background image, draw checkerboard pattern
+          const squareSize = 10;
+          const numCols = Math.ceil(canvas.width / squareSize);
+          const numRows = Math.ceil(canvas.height / squareSize);
 
           for (let i = 0; i < numCols; i++) {
             for (let j = 0; j < numRows; j++) {
-              if ((i + j) % 2 === 0) {
-                ctx.fillStyle = '#cccccc';
-              } else {
-                ctx.fillStyle = '#ffffff';
-              }
+              ctx.fillStyle = (i + j) % 2 === 0 ? '#cccccc' : '#ffffff';
               ctx.fillRect(i * squareSize, j * squareSize, squareSize, squareSize);
             }
           }
 
-          // Calculate the aspect ratio of the image and canvas
-          const imageAspectRatio = img.width / img.height;
-          const canvasAspectRatio = canvas.width / canvas.height;
-
-          let renderableWidth, renderableHeight, xStart, yStart;
-
-          if (imageAspectRatio < canvasAspectRatio) {
-            renderableHeight = canvas.height;
-            renderableWidth = img.width * (renderableHeight / img.height);
-            xStart = (canvas.width - renderableWidth) / 2;
-            yStart = 0;
-          } else {
-            renderableWidth = canvas.width;
-            renderableHeight = img.height * (renderableWidth / img.width);
-            xStart = 0;
-            yStart = (canvas.height - renderableHeight) / 2;
-          }
-
-          // Draw the image with the contain style
-          ctx.drawImage(img, xStart, yStart, renderableWidth, renderableHeight);
-        };
+          drawAvatar(); // Draw the avatar if no background is present
+        }
       }
-    }
-  }, [currentImage]);
+    };
+
+    drawCanvas();
+  }, [currentImage, canvasArray]);
 
 
   useEffect(() => {
     let getHeight = window.innerHeight;
-    setScreenHeight(getHeight)
-  }, [])
-
+    setScreenHeight(getHeight);
+  }, []);
 
   return (
     <div className='editor-layout w-full'>
@@ -363,7 +424,7 @@ const EditorLayout = () => {
             <div className="col-9 ps-0">
               <div ref={containerRef} id='menu-tab-options' className="menu-tab-options">
                 {activeTab === "avatar" ? (
-                  <Avatar dataArray={dataArray} handleLoadImage={handleLoadImage} imageWidth={imageWidth} screenHeight={screenHeight} />
+                  <Avatar dataArray={dataArray} handleLoadImage={handleImageClick} imageWidth={imageWidth} screenHeight={screenHeight} />
                 ) : activeTab === "script" ? (
                   <Script
                     editorArray={editorArray}
@@ -372,7 +433,7 @@ const EditorLayout = () => {
                     handleButtonClickToRemoveTextarea={handleButtonClickToRemoveTextarea}
                   />
                 ) : activeTab === "assets" ? (
-                  <Assets />
+                  <Assets backgrounds={backgrounds} handleLoadImage={handleBackgroundClick} />
                 ) : (
                   <div className="template">
                     {/* Other template code */}
@@ -457,7 +518,7 @@ const EditorLayout = () => {
                               justifyContent: 'center',
                               position: 'relative',
                             }}
-                            onClick={() => handleImageClick(index, val.image)}
+                            onClick={() => handleImageClick(index, val.image, val.title)}
                           >
                             <div className="resizer"
                               style={{

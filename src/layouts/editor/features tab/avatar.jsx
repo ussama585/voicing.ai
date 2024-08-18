@@ -16,7 +16,7 @@ console.log(screenHeight,"scrrennene")
           <div
             key={index}
             className="template-image text-center cursor-pointer transition-transform transform hover:scale-105 mb-3 me-2"
-            onClick={() => handleLoadImage(row, index)}
+            onClick={() => handleLoadImage(index, row.image, row.title)}
           >
             <img src={row.image} alt={row.title} style={{ width: `calc(${thumbWidth}px - 20px)` }} className="w-full h-auto object-cover" />
             <p className="mt-2 text-sm font-medium text-gray-700">{row.title}</p>
