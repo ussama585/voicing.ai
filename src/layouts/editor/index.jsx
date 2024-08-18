@@ -54,8 +54,6 @@ import { demo3 } from 'assets/img/images';
 import { demo2 } from 'assets/img/images';
 import { videoPlaceholder } from 'assets/img/images';
 import { musicFrame } from 'assets/img/images';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 // import { bg4 } from 'assets/img/images';
 // import { bg5 } from 'assets/img/images';
 

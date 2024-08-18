@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Avatar = ({ dataArray, handleLoadImage, imageWidth, screenHeight }) => {
+const Avatar = ({ dataArray, handleLoadImage, imageWidth }) => {
   const thumbWidth = (imageWidth / 2 - 20);
 
   return (
